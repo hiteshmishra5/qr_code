@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Camp Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 7px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            width: 100%;
+            margin: 5px auto;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th:last-child, td:last-child {
+            border-right: none;
+        }
+
+        th:first-child, td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #fff;
+            z-index: 1;
+        }
+
+        td:first-child {
+            z-index: 2;
+        }
+
+        .table-container {
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .small-dropdown {
+            font-size: 0.70rem;
+            padding: 0.10rem;
+
+        }
+
+        .table-header th {
+            padding: 3px;
+            padding-bottom: 15px;
+        }
+
+        .dropdown-select1 {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-select1 select {
+            width:40%;
+            padding: 5px;
+            font-size: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px; /* Adjust as needed */
+        }
+
+        .dropdown-select1 select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px #007bff;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="container full-screen-card">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead class = 'table-header'>
+                        <tr>
+                            <th class = 'name'>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-location-dropdown">
+                                    <div>Location</div>
+                                    <select id="filter-location-select" class="form-control">
+                                        <option value="">All</option>
+                                        {% for location in data.locations %}
+                                            <option value="{{ location.id }}">{{ location.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-date-dropdown">
+                                    <div>Date</div>
+                                    <input type="date" id="filter-date-select" class="form-control form-control-sm" onchange="filterTable()">
+                                </div>
+                            </th>
+                             <th>
+                                <div class="dropdown-select1" id="filter-xray-dropdown-xray">
+                                    <div>XRAY</div>
+                                    <select id="filter-xray-select-xray" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-ecg-dropdown-ecg">
+                                    <div>ECG</div>
+                                    <select id="filter-ecg-select-ecg" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-pft-dropdown-pft">
+                                    <div>PFT</div>
+                                    <select id="filter-pft-select-pft" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-audiometry-dropdown-audiometry">
+                                    <div>AUDIO</div>
+                                    <select id="filter-audiometry-select-audiometry" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-optometry-dropdown-optometry">
+                                    <div>OPTO</div>
+                                    <select id="filter-optometry-select-optometry" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+<!--                            <th>-->
+<!--                                <div class="dropdown-select1" id="filter-vitals-dropdown-vitals">-->
+<!--                                    <div>VITALS</div>-->
+<!--                                    <select id="filter-vitals-select-vitals" class="form-control">-->
+<!--                                        <option value="">All</option>-->
+<!--                                        <option value="Done">Done</option>-->
+<!--                                        <option value="Pending">Pending</option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                <div class="dropdown-select1" id="filter-sample_collection-dropdown-sample_collection">-->
+<!--                                    <div>SAMPLE COLLECTION</div>-->
+<!--                                    <select id="filter-sample_collection-select-sample_collection" class="form-control">-->
+<!--                                        <option value="">All</option>-->
+<!--                                        <option value="Done">Done</option>-->
+<!--                                        <option value="Pending">Pending</option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                            </th>-->
+                        </tr>
+                    </thead>
+                    <tbody class="scrollable-body">
+                        {% for customer in data.customers %}
+                            <tr>
+                                <td>{{ customer.patient_name }}</td>
+                                <td>{{ customer.age }}</td>
+                                <td>{{ customer.gender }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>{{ customer.phone }}</td>
+                                <td>{{ customer.location.name }}</td>
+                                <td>{{ customer.date_field }}</td>
+                                <td>{% if customer.xray == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.ecg == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.pft == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.audiometry == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.optometry == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+<!--                                <td>{% if customer.vitals == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>-->
+<!--                                <td>{% if customer.sample_collection == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>-->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<script>
+    // Function to refresh the page after 30 minutes (30,000 milliseconds)
+    function autoRefresh() {
+        setTimeout(function () {
+            location.reload();
+        }, 30000); // 30,000 milliseconds = 30 sec.
+    }
+
+    // Call the autoRefresh function when the page loads
+    window.onload = autoRefresh;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Add event listener for date filter
+        var dateFilter = document.getElementById('filter-date-select');
+        dateFilter.addEventListener('change', filterTable);
+
+        // Get all filter dropdowns
+        var filterDropdowns = document.querySelectorAll('.dropdown-select1 select');
+
+        // Attach event listener to each dropdown
+        filterDropdowns.forEach(function (dropdown) {
+            dropdown.addEventListener('change', filterTable);
+        });
+    });
+
+    // Function to filter the table based on selected values
+    function filterTable() {
+        // Get selected values from filters
+        var locationValue = document.getElementById('filter-location-select').value.toLowerCase();
+        var dateValue = document.getElementById('filter-date-select').value;
+        var xrayValue = document.getElementById('filter-xray-select-xray').value.toLowerCase();
+        var ecgValue = document.getElementById('filter-ecg-select-ecg').value.toLowerCase();
+        var pftValue = document.getElementById('filter-pft-select-pft').value.toLowerCase();
+        var audiometryValue = document.getElementById('filter-audiometry-select-audiometry').value.toLowerCase();
+        var optometryValue = document.getElementById('filter-optometry-select-optometry').value.toLowerCase();
+
+        // Get all rows in the table body
+        var rows = document.querySelectorAll('.scrollable-body tr');
+
+        // Iterate through each row and hide/show based on the selected values
+        rows.forEach(function (row) {
+            var locationCell = row.cells[5];
+            var dateCell = row.cells[6];
+            var xrayCell = row.cells[7];
+            var ecgCell = row.cells[8];
+            var pftCell = row.cells[9];
+            var audiometryCell = row.cells[10];
+            var optometryCell = row.cells[11];
+
+            var locationText = locationCell.textContent.toLowerCase();
+            var dateText = dateCell.textContent;
+            var xrayText = xrayCell.textContent.toLowerCase();
+            var ecgText = ecgCell.textContent;
+            var pftText = pftCell.textContent.toLowerCase();
+            var audiometryText = audiometryCell.textContent.toLowerCase();
+            var optometryText = optometryCell.textContent.toLowerCase();
+
+            // Check if the row matches the selected values, show or hide accordingly
+            if (
+                (locationValue === '' || locationText === locationValue) &&
+                (dateValue === '' || dateText === dateValue) &&
+                (xrayValue === '' || xrayText === xrayValue) &&
+                (ecgValue === '' || ecgText === ecgValue) &&
+                (pftValue === '' || pftText === pftValue) &&
+                (audiometryValue === '' || audiometryText === audiometryValue) &&
+                (optometryValue === '' || optometryText === optometryValue)
+            ) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+
+</body>
+
+</html>
+
+

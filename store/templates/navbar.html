@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            border-radius: 5px;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .rounded-card {
+            background-color: white;
+            color: black;
+            border-radius: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .dropdown-toggle {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .dropdown-toggle {
+            background-color: blue;
+        }
+
+        .patient-count {
+            width: 120px;
+        }
+
+        .logout-button,
+        .download-button {
+            text-decoration: none;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        {% if data.coordinator.registration_type_id == 1 %}
+        <div class='row'>
+            <div class="col">
+                <div class="rounded-card">
+                    <div class = 'col'>
+                        <div class="patient-count">XRAY <strong>{{data.count.xray}}</strong></div>
+                        <div class="patient-count">ECG <strong>{{data.count.ecg}}</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="rounded-card">
+                    <div class = 'col'>
+                        <div class="patient-count">PFT <strong>{{data.count.pft}}</strong></div>
+                        <div class="patient-count">AUDIO <strong>{{data.count.audiometry}}</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="rounded-card">
+                    <div class = 'col'>
+                        <div class="patient-count">OPTO <strong>{{data.count.optometry}}</strong></div>
+                        <div class="patient-count">VITALS <strong>{{data.count.vitals}}</strong></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+
+<!--        <div class="dropdown">-->
+<!--            <button class="btn btn-secondary dropdown-toggle" type="button" id="modalitiesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                Select Your Modality-->
+<!--            </button>-->
+<!--            <div class="dropdown-menu" aria-labelledby="modalitiesDropdown">-->
+<!--                <form action="/save_modalities" method="POST">-->
+<!--                    {% csrf_token %}-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="xray" id="xrayCheckbox">-->
+<!--                        <label class="form-check-label" for="xrayCheckbox">-->
+<!--                            X-Ray-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="ecg" id="ecgCheckbox">-->
+<!--                        <label class="form-check-label" for="ecgCheckbox">-->
+<!--                            ECG-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="pft" id="pftCheckbox">-->
+<!--                        <label class="form-check-label" for="pftCheckbox">-->
+<!--                            PFT-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="audiometry" id="audiometryCheckbox">-->
+<!--                        <label class="form-check-label" for="audiometryCheckbox">-->
+<!--                            Audiometry-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="optometry" id="optometryCheckbox">-->
+<!--                        <label class="form-check-label" for="optometryCheckbox">-->
+<!--                            Optometry-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="vitals" id="vitalsCheckbox">-->
+<!--                        <label class="form-check-label" for="vitalsCheckbox">-->
+<!--                            Vitals-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="sample_collection" id="sample_collectionCheckbox">-->
+<!--                        <label class="form-check-label" for="sample_collectionCheckbox">-->
+<!--                            Sample Collection-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                    <button type="submit" class="btn btn-warning btn-sm">Save</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+        <div class = 'col d-flex justify-content-end'>
+            <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <strong>Actions</strong>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="/upload" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item"><strong>Upload Excel</strong></button>
+                </form>
+                <button class="dropdown-item download-button" onclick="downloadExcel()"><strong>Get Excel</strong></button>
+                <a href="/logout" class="dropdown-item logout-button"><strong>Logout</strong></a>
+            </div>
+        </div>
+        </div>
+
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
+    <script>
+        function downloadExcel() {
+            /* Get the table data and convert it to a worksheet */
+            var table = document.querySelector('.table');
+            var ws = XLSX.utils.table_to_sheet(table);
+
+            /* Remove unwanted headers */
+            var unwantedHeaders = ['AllDonePending'];
+            unwantedHeaders.forEach(function (header) {
+                delete ws[header];
+            });
+
+            /* Create a workbook containing the worksheet */
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+            /* Save the workbook as an Excel file */
+            XLSX.writeFile(wb, 'dashboard_data.xlsx');
+        }
+
+    </script>
+
+</body>
+
+</html>
