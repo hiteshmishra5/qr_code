@@ -18,7 +18,7 @@ class Dashboard(View):
         pft_modalities = Users.objects.filter(pft=True).count()
         audiometry_modalities = Users.objects.filter(audiometry=True).count()
         optometry_modalities = Users.objects.filter(optometry=True).count()
-        vitals_modalities = Users.objects.filter(vitals=True).count()
+        sputum_modalities = Users.objects.filter(sputum=True).count()
         sample_collection_modalities = Users.objects.filter(sample_collection=True).count()
 
         count_modalities = {'xray': xray_modalities,
@@ -26,7 +26,7 @@ class Dashboard(View):
                             'pft': pft_modalities,
                             'audiometry': audiometry_modalities,
                             'optometry': optometry_modalities,
-                            'vitals': vitals_modalities,
+                            'sputum': sputum_modalities,
                             'sample_collection': sample_collection_modalities}
 
 

@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -73,6 +77,8 @@
             cursor: pointer;
             display: inline-block;
         }
+
+
     </style>
 </head>
 
@@ -101,67 +107,13 @@
                 <div class="rounded-card">
                     <div class = 'col'>
                         <div class="patient-count">OPTO <strong>{{data.count.optometry}}</strong></div>
-                        <div class="patient-count">VITALS <strong>{{data.count.vitals}}</strong></div>
+                        <div class="patient-count">SPUTUM <strong>{{data.count.sputum}}</strong></div>
                     </div>
                 </div>
             </div>
 
         </div>
         {% endif %}
-
-<!--        <div class="dropdown">-->
-<!--            <button class="btn btn-secondary dropdown-toggle" type="button" id="modalitiesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                Select Your Modality-->
-<!--            </button>-->
-<!--            <div class="dropdown-menu" aria-labelledby="modalitiesDropdown">-->
-<!--                <form action="/save_modalities" method="POST">-->
-<!--                    {% csrf_token %}-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="xray" id="xrayCheckbox">-->
-<!--                        <label class="form-check-label" for="xrayCheckbox">-->
-<!--                            X-Ray-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="ecg" id="ecgCheckbox">-->
-<!--                        <label class="form-check-label" for="ecgCheckbox">-->
-<!--                            ECG-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="pft" id="pftCheckbox">-->
-<!--                        <label class="form-check-label" for="pftCheckbox">-->
-<!--                            PFT-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="audiometry" id="audiometryCheckbox">-->
-<!--                        <label class="form-check-label" for="audiometryCheckbox">-->
-<!--                            Audiometry-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="optometry" id="optometryCheckbox">-->
-<!--                        <label class="form-check-label" for="optometryCheckbox">-->
-<!--                            Optometry-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="vitals" id="vitalsCheckbox">-->
-<!--                        <label class="form-check-label" for="vitalsCheckbox">-->
-<!--                            Vitals-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" name="modalities[]" value="sample_collection" id="sample_collectionCheckbox">-->
-<!--                        <label class="form-check-label" for="sample_collectionCheckbox">-->
-<!--                            Sample Collection-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                    <button type="submit" class="btn btn-warning btn-sm">Save</button>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
 
 
         <div class = 'col d-flex justify-content-end'>
@@ -180,21 +132,19 @@
         </div>
         </div>
 
+
     </nav>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-ojvDy9z1q8u3I+pa2jSn8a9z9LXNU2UZ+MW0EzIbOi7wA1kZ6Uqpm8p7l1r44tx" crossorigin="anonymous"></script>
+
 
     <script>
         function downloadExcel() {
             /* Get the table data and convert it to a worksheet */
             var table = document.querySelector('.table');
             var ws = XLSX.utils.table_to_sheet(table);
-
-            /* Remove unwanted headers */
-            var unwantedHeaders = ['AllDonePending'];
-            unwantedHeaders.forEach(function (header) {
-                delete ws[header];
-            });
+            console.log(ws)
 
             /* Create a workbook containing the worksheet */
             var wb = XLSX.utils.book_new();

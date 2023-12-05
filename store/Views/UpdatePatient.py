@@ -10,7 +10,7 @@ class UpdatePatient(View):
     def post(self, request, customer_id):
         # Check for the presence of the 'optometry_form' parameter
         if 'optometry_form' in request.POST:
-            print("Hitesh")
+            patient_id = request.POST.get('patient_id')
             far_vision_right = request.POST.get("far_vision_right")
             far_vision_left = request.POST.get("far_vision_left")
             near_vision_right = request.POST.get("near_vision_right")
@@ -19,6 +19,7 @@ class UpdatePatient(View):
             others = request.POST.get("others")
 
             optometry = OptometryModel(
+                patient_id = patient_id,
                 far_vision_right=far_vision_right,
                 far_vision_left=far_vision_left,
                 near_vision_right=near_vision_right,

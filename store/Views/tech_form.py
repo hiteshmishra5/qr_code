@@ -102,10 +102,11 @@ class AddPatient(View):
 
         return None
     def save_modalities(self, request):
-        # Iterate over all patients in the form
         for key in request.POST.keys():
-            if any(key.startswith(modality) for modality in ['xray_', 'ecg_', 'pft_', 'audiometry_', 'optometry_', 'vitals_', 'sample_collection_']):
-                patient_id_from_checkbox = key.split('_')[-1]
+            if any(key.startswith(modality) for modality in ['xray+', 'ecg+', 'pft+', 'audiometry+', 'optometry+', 'sputum+']):
+
+                patient_id_from_checkbox = key.split('+')[-1]
+                print(patient_id_from_checkbox)
 
                 # Fetch the corresponding patient instance
                 try:
@@ -119,24 +120,24 @@ class AddPatient(View):
                 current_pft = patient.pft
                 current_audiometry = patient.audiometry
                 current_optometry = patient.optometry
-                current_vitals = patient.vitals
-                current_sample_collection = patient.sample_collection
+                current_sputum = patient.sputum
+                # current_sample_collection = patient.sample_collection
 
                 # Update the modalities based on the form data if the checkbox is checked
-                if 'xray_{}'.format(patient_id_from_checkbox) in request.POST:
+                if 'xray+{}'.format(patient_id_from_checkbox) in request.POST:
                     patient.xray = True
-                if 'ecg_{}'.format(patient_id_from_checkbox) in request.POST:
+                if 'ecg+{}'.format(patient_id_from_checkbox) in request.POST:
                     patient.ecg = True
-                if 'pft_{}'.format(patient_id_from_checkbox) in request.POST:
+                if 'pft+{}'.format(patient_id_from_checkbox) in request.POST:
                     patient.pft = True
-                if 'audiometry_{}'.format(patient_id_from_checkbox) in request.POST:
+                if 'audiometry+{}'.format(patient_id_from_checkbox) in request.POST:
                     patient.audiometry = True
-                if 'optometry_{}'.format(patient_id_from_checkbox) in request.POST:
+                if 'optometry+{}'.format(patient_id_from_checkbox) in request.POST:
                     patient.optometry = True
-                if 'vitals_{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.vitals = True
-                if 'sample_collection_{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.sample_collection = True
+                if 'sputum+{}'.format(patient_id_from_checkbox) in request.POST:
+                    patient.sputum = True
+                # if 'sample_collection_{}'.format(patient_id_from_checkbox) in request.POST:
+                #     patient.sample_collection = True
 
 
                 # If a checkbox was unchecked in the form but is already checked in the database, prevent the update
@@ -150,10 +151,10 @@ class AddPatient(View):
                     patient.audiometry = current_audiometry
                 if not patient.optometry and current_optometry:
                     patient.optometry = current_optometry
-                if not patient.vitals and current_vitals:
-                    patient.vitals = current_vitals
-                if not patient.sample_collection and current_sample_collection:
-                    patient.sample_collection = current_sample_collection
+                if not patient.sputum and current_sputum:
+                    patient.vitals = current_sputum
+                # if not patient.sample_collection and current_sample_collection:
+                #     patient.sample_collection = current_sample_collection
 
                 patient.save()
 
@@ -217,7 +218,6 @@ class UploadView(View):
                 return redirect('dashboard')
 
             except pd.errors.EmptyDataError:
-                # Handle empty Excel file
                 return render(request, 'upload.html', {'error': 'Empty Excel file'})
 
             except Exception as e:

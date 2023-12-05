@@ -44,7 +44,7 @@
 
     /* Style for the plus button */
     .plus-button {
-        background: none;
+        background: pink;
         border: none;
         cursor: pointer;
         margin-left: 5px;
@@ -149,22 +149,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <input type="text" class="form-control form-control-sm mt-2" id="address" name="address"
-                                    value="{{ customer.address }}">
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="location">Location</label>-->
+<!--                                <select class="form-control form-control-sm mt-2" id="location" name="location" required>-->
+<!--                                    <option value="{{ customer.location }}" selected>{{ customer.location }}</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class='col'>-->
+<!--                            <div class='form-group'>-->
+<!--                                <label for="date">Date</label>-->
+<!--                                <input type="date" id="date" name="date" class="form-control form-control-sm" value="{{ customer.date|date:'Y-m-d' }}" pattern="\d{4}-\d{2}-\d{2}">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <!--Optometry-->
                     <div class = 'row'>
                         <div class = 'col'>
                             <label><strong>Optometry</strong></label>
                             <button type="button" class="plus-button mt-3" style="outline: none;" onclick="openModal()">
-                                <i class="fa-solid fa-plus" style="color: #511f1f; border-radius: 25%; padding: 4px;"></i>
+                                <i class="fa-solid fa-plus" style="color: blue; border-radius: 25%; padding: 4px;"></i>
                             </button>
 
                         </div>
@@ -204,6 +211,12 @@
             <h3 class="card-title">Optometry</h3>
             <form id="cardiologist-form" method="post" action="{% url 'optometry' %}">
                 {% csrf_token %}
+                <div class = 'row'>
+                    <div class = 'form-group-my-form-group'>
+                        <label for="patient_id">Patient Id/Employee Id</label>
+                        <input type="text" class="form-control form-control-sm mt-2" name="patient_id" value="{{ customer.patient_id }}" autocomplete="off">
+                    </div>
+                </div>
                 <div class = 'row'>
                     <div class = 'col'>
                         <div class="form-group my-form-group">
@@ -307,6 +320,7 @@
 
     var submitButton = document.getElementById("submit-cardiologist");
     submitButton.addEventListener("click", function() {
+        console.log("Button clicked");
         // Get the selected radio button value for color vision
         var colorVisionRadioButtons = document.getElementsByName("color_vision");
         var selectedColorVision = "";

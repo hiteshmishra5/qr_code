@@ -119,13 +119,19 @@
             <div class="col">
             <h4 class="text-center bg-warning alert">Show Patient Details</h4>
             <form action="/search" method="GET">
-              <div class="input-group mb-3">
-                <input type="text" name="search" class="form-control" placeholder="Search">
-                <div class="input-group-append">
-                  <button type="submit" class="btn btn-success">Go</button>
+                <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success">Go</button>
+                    </div>
+                    <div class="input-group-append" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
+                        <button type="button" class="refresh" onclick="refreshPage()">
+                            <i style="font-size: 19px" class="fa">&#xf021;</i>
+                        </button>
+                    </div>
                 </div>
-              </div>
             </form>
+
             <div id="scrollable-container">
 
               {% if customers %}
@@ -140,7 +146,7 @@
                       <th class="sticky-header">PFT</th>
                       <th class="sticky-header">Audio</th>
                       <th class="sticky-header">Opto</th>
-<!--                      <th class="sticky-header">Vitals</th>-->
+                      <th class="sticky-header">Sputum</th>
 <!--                      <th class="sticky-header">Sample Collection</th>-->
                     </tr>
                   </thead>
@@ -149,23 +155,23 @@
                     <tr>
                       <td>{{ customer.patient_name }}</td>
                       <td>
-                        <input type="checkbox" id="xray" name="xray_{{customer.patient_id}}" {% if customer.xray %}checked{% endif %}>
+                        <input type="checkbox" id="xray" name="xray+{{customer.patient_id}}" {% if customer.xray %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="ecg" name="ecg_{{customer.patient_id}}" {% if customer.ecg %}checked{% endif %}>
+                        <input type="checkbox" id="ecg" name="ecg+{{customer.patient_id}}" {% if customer.ecg %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="pft" name="pft_{{customer.patient_id}}" {% if customer.pft %}checked{% endif %}>
+                        <input type="checkbox" id="pft" name="pft+{{customer.patient_id}}" {% if customer.pft %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="audiometry" name="audiometry_{{customer.patient_id}}" {% if customer.audiometry %}checked{% endif %}>
+                        <input type="checkbox" id="audiometry" name="audiometry+{{customer.patient_id}}" {% if customer.audiometry %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="optometry" name="optometry_{{customer.patient_id}}" {% if customer.optometry %}checked{% endif %}>
+                        <input type="checkbox" id="optometry" name="optometry+{{customer.patient_id}}" {% if customer.optometry %}checked{% endif %}>
                       </td>
-<!--                      <td>-->
-<!--                        <input type="checkbox" id="vitals" name="vitals_{{customer.patient_id}}" {% if customer.vitals %}checked{% endif %}>-->
-<!--                      </td>-->
+                      <td>
+                        <input type="checkbox" id="sputum" name="sputum+{{customer.patient_id}}" {% if customer.sputum %}checked{% endif %}>
+                      </td>
 <!--                      <td>-->
 <!--                        <input type="checkbox" id="sample_collection" name="sample_collection_{{customer.patient_id}}" {% if customer.sample_collection %}checked{% endif %}>-->
 <!--                      </td>-->
@@ -192,10 +198,38 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
 
 
 <script>
+
+    // Function to refresh the page and call Google Drive URLs
+    async function refreshPage() {
+        try {
+            const response = await fetch('/googledrive');
+            if (response.ok) {
+                console.log('Google Drive URLs successfully called');
+            } else {
+                console.error('Error calling Google Drive URLs');
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        } finally {
+            setTimeout(() => {
+                location.reload();
+            }, 2000); // Adjust the delay (in milliseconds) before refreshing the page
+        }
+    }
+
+    // ... Your existing Instascan and other JavaScript code ...
+
+    // Example of calling refreshPage function
+    document.getElementById('refresh-button').addEventListener('click', function () {
+        refreshPage();
+    });
+
+
+
     const scanner = new Instascan.Scanner({
         video: document.getElementById('barcode-scanner')
     });
@@ -271,11 +305,6 @@
     }
 
 
-
-
-
-
-
      #edit {
       margin-bottom: 15px;
      }
@@ -340,6 +369,32 @@
         margin: 0;
         cursor: pointer;
     }
+
+    .refresh {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        font-size: 14px;
+    }
+
+
 
 </style>
 
