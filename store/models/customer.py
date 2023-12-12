@@ -11,6 +11,7 @@ class Users(models.Model):
     email = models.CharField(max_length=50, null=True, blank=True)
     weight = models.IntegerField(null=True, default=None)
     date_field = models.DateField(default=None)
+    current_time = models.DateTimeField(auto_now_add=True)
 
     xray = models.BooleanField(default=False)
     ecg = models.BooleanField(default=False)
