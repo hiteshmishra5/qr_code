@@ -5,7 +5,7 @@ from store.models.location import Location
 from django.contrib.auth import logout
 from django.db.models import Q
 import pandas as pd
-from datetime import datetime as dt
+from datetime import datetime  
 from pytz import timezone
 from datetime import timedelta
 
@@ -41,8 +41,9 @@ class AddPatient(View):
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         location_id = request.POST.get('location-select')
-        date_str = request.POST.get('date-select')
-        date = dt.strptime(date_str, '%Y-%m-%d').date() if date_str else None
+        date_field = request.POST.get('date-select')
+        datetime_obj = datetime.strptime(date_field, "%Y-%m-%d")
+        formatted_date = datetime_obj.strftime("%Y-%m-%d")
 
 
         try:
@@ -59,7 +60,7 @@ class AddPatient(View):
                  "email": email,
                  "location": location_id,
                  "patient_id": patient_id,
-                 "date": date}
+                 "date": formatted_date}
 
         # Validate the customer object
         error_message = self.validate_customer(patient_name, age, phone, email, patient_id)
@@ -80,8 +81,8 @@ class AddPatient(View):
                 weight=weight,
                 phone=phone,
                 email=email,
-                date_field=date,
-                current_time = dt.now(tz=timezone(timedelta(hours=5.5))).strftime("%H:%M:%S")
+                date_field=formatted_date,
+                 
             )
 
             new_patient.save()

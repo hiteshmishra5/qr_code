@@ -115,7 +115,7 @@
             </div>
         </div>
 
-        <div class="col-sm-7 border rounded px-4 py-3 offset-sm-1" style="position: sticky; top: 0;">
+        <div class="col-sm-7 border rounded px-4 py-3 offset-sm-1" style="position: sticky; top: 0; height: fit-content;">
             <div class="col">
             <h4 class="text-center bg-warning alert">Show Patient Details</h4>
             <form action="/search" method="GET">
@@ -126,19 +126,20 @@
                     </div>
                     <div class="input-group-append" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
                         <button type="button" class="refresh" onclick="refreshPage()">
-                            <i style="font-size: 19px" class="fa">&#xf021;</i>
+                            <i style="font-size: 19px" class="fa">&#xf021;</i>                           
                         </button>
                     </div>
                 </div>
             </form>
 
             <div id="scrollable-container">
-
               {% if customers %}
                 <form method="POST" action="{% url 'form' %}">
                     {% csrf_token %}
+                    <div class="outer-wrapper">
+                        <div class="table-wrapper">
                 <table class="table table-hover">
-                  <thead>
+                    <thead class="header">
                     <tr class="sticky">
                       <th class="sticky-header">Patient Name</th>
                       <th class="sticky-header">X-Ray</th>
@@ -147,9 +148,23 @@
                       <th class="sticky-header">Audio</th>
                       <th class="sticky-header">Opto</th>
                       <th class="sticky-header">Sputum</th>
-<!--                      <th class="sticky-header">Sample Collection</th>-->
+                      <th class="sticky-header">Buttons</th>
+                      <!--  <th class="sticky-header">Sample Collection</th>-->
                     </tr>
                   </thead>
+                  <style>
+                  .header {
+                    position: sticky;
+                    top: 0;
+                    background-color: #007BFF;
+                    z-index: 1;
+                    width: fit-content;
+                    }
+                    .sticky-header {
+    position: relative; /* Reset the position */
+}
+
+                </style>
                   <tbody class="scrollable-body">
                     {% for customer in customers %}
                     <tr>
@@ -186,6 +201,8 @@
                     {% endfor %}
                   </tbody>
                 </table>
+                </div>
+</div>
                 </form>
               {% else %}
               <h4 class="text-center">No Records</h4>
@@ -322,7 +339,6 @@
         overflow-y: auto;
 
     }
-
     #scrollable-container1 {
       position: absolute;
       right: 0;
@@ -330,19 +346,22 @@
       z-index: 10;
       display: block;
     }
+    .scrollable-body {
+        max-height: 300px; /* Adjust the maximum height according to your needs */
+        position: relative;
+    }
 
-    .sticky-header {
+    /* .sticky-header {
         position: sticky;
         top: 0;
         background-color: blue;
-        color: black;
-    }
+        z-index: 1; 
+        overflow: hidden;
+    } */
+    
+     
 
-    .scrollable-body {
-        max-height: 300px; /* Adjust the maximum height according to your needs */
-        overflow-y: auto;
-        position: relative;
-    }
+    
 
     #location-select,
     #date-select {
@@ -393,7 +412,7 @@
     .popup-content {
         font-size: 14px;
     }
-
+    
 
 
 </style>

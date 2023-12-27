@@ -115,7 +115,9 @@
         .hidden {
             display: none;
         }
-
+        .hidden-row {
+            display: none;
+        }
 
 
     </style>
@@ -128,7 +130,7 @@
     <div class="container full-screen-card">
         <div class="card">
             <div class="card-body">
-                <table class="table">
+                <table class="table" id="tableID">
                     <thead class='table-header'>
                         <tr>
                             <th>Patient ID</th>
@@ -143,16 +145,23 @@
                                     <select class="form-control" data-column="6">
                                         <option value="">All</option>
                                         {% for location in data.locations %}
-                                            <option value="{{ location.id }}">{{ location.name }}</option>
+                                            <option value="{{ location.name }}">{{ location.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </th>
                             <th>
                                 <div class="dropdown-select1" id="filter-date-dropdown">
-                                    <div>Date</div>
-                                    <input type="date" class="form-control form-control-sm" data-column="7" onchange="filterTableByDropdown()">
+                                    <label for="filter-date-select-date">Date</label>
+                                    <select id="filter-date-select-date" class="form-control form-control-sm" data-column="7" onchange="filterTableByDate()">
+                                        <option value="">All</option>
+                                         {% for date1 in data.date %}
+                                         <option value="{{ date1 }}">{{ date1 }}</option>
+                                        {% endfor %}
+                                        <!-- Add more date options as needed -->
+                                    </select>
                                 </div>
+                                
                             </th>
                             <th>
                                 <div class="dropdown-select1" id="filter-xray-dropdown-xray">
@@ -226,7 +235,8 @@
                                 <td class='hidden email'>{{ customer.email }}</td>
                                 <td class='hidden phone'>{{ customer.phone }}</td>
                                 <td>{{ customer.location.name }}</td>
-                                <td>{{ customer.date_field }}</td>
+                                <!-- Update the date column to include the data-date attribute -->
+                                <td data-date="{{ customer.date_field|date:'Y-m-d' }}">{{ customer.date_field|date:'Y-m-d' }}</td>
                                 <td>{% if customer.xray == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
                                 <td>{% if customer.ecg == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
                                 <td>{% if customer.pft == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
@@ -247,6 +257,25 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
     <script>
+        //Filter Table by Date
+        function filterTableByDate() {
+            var selectedDate = $("#filter-date-select-date").val();
+
+            $("#tableID tbody tr").each(function () {
+                var rowDateElement = $(this).find("td:eq(7)");
+                var rowDate = new Date(rowDateElement.data("date"));
+
+                if (selectedDate === "" || selectedDate === rowDate.toISOString().slice(0, 10)) {
+                    $(this).removeClass("hidden-row");
+                } else {
+                    $(this).addClass("hidden-row");
+                }
+            });
+        }
+
+
+
+
         // Function to refresh the page after 30 minutes (30,000 milliseconds)
         function autoRefresh() {
             setTimeout(function () {
@@ -290,6 +319,9 @@
         document.querySelectorAll('.dropdown-select1 select').forEach(function (select) {
             select.addEventListener('change', filterTableByDropdown);
         });
+
+        /*Location Filter by Divyansh 19 dec 2023*/
+        
     </script>
 
 
