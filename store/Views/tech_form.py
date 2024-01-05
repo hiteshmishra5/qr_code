@@ -98,7 +98,7 @@ class AddPatient(View):
             return "Age field is required"
         elif not phone:
             return "Phone Number is required"
-        elif len(phone) < 10 and len(phone) == 10:
+        elif len(phone) < 10 and len(phone) > 10:
             return "Phone Number must be 10 digits"
         elif len(email) < 10:
             return "This is not a valid Email"

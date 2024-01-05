@@ -16,6 +16,7 @@ urlpatterns = [
     path('search', SearchPatient.as_view(), name='search'),
     path('upload', UploadView.as_view(), name='upload'),
     path('optometry', UpdatePatient.as_view(), name='optometry'),
+    path('vitals', UpdatePatient.as_view(), name='vitals'),
     path('googledrive', Google.as_view(), name='upload_csv'),
     path('logout', LogoutView.as_view(), name='logout')
 

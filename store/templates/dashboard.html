@@ -141,7 +141,7 @@
                             <th class='hidden phone'>Phone</th>
                             <th>
                                 <div class="dropdown-select1" id="filter-location-dropdown">
-                                    <div>Location</div>
+                                  <div>Location</div>
                                     <select class="form-control" data-column="6">
                                         <option value="">All</option>
                                         {% for location in data.locations %}
@@ -280,7 +280,7 @@
         function autoRefresh() {
             setTimeout(function () {
                 location.reload();
-            }, 60000); // 60,000 milliseconds = 1 min.
+            }, 300000); // 60,000 milliseconds = 1 min.
         }
 
         // Call the autoRefresh function when the page loads
@@ -321,7 +321,19 @@
         });
 
         /*Location Filter by Divyansh 19 dec 2023*/
-        
+        // Retrieve the saved value from localStorage
+        // var selectedLocation = localStorage.getItem('selectedLocation');
+
+        // // Set the selected value in the dropdown
+        // if (selectedLocation) {
+        //     document.getElementById('location-filter').value = selectedLocation;
+        // }
+
+        // // Add an event listener to the dropdown to save the selected value in localStorage
+        // document.getElementById('location-filter').addEventListener('change', function () {
+        //     var selectedValue = this.value;
+        //     localStorage.setItem('selectedLocation', selectedValue);
+        // });
     </script>
 
 

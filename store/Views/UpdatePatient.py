@@ -18,6 +18,7 @@ class UpdatePatient(View):
             color_vision = request.POST.get("color_vision")
             others = request.POST.get("others")
 
+
             optometry = OptometryModel(
                 patient_id = patient_id,
                 far_vision_right=far_vision_right,
@@ -27,10 +28,34 @@ class UpdatePatient(View):
                 color_vision=color_vision,
                 others=others
             )
+            print("Hello")
+            print(optometry)
             optometry.save()
 
             return redirect("form")
+        
+        elif 'vitals_form' in request.POST:
+            patient_id = request.POST.get('patient_id')
+            height = request.POST.get('height')
+            weight = request.POST.get('weight')
+            blood_pressure = request.POST.get('blood_pressure')
+            oxygen_saturation = request.POST.get('oxygen_saturation')
+            bmi = request.POST.get('bmi')
+            pulse = request.POST.get('pulse')
 
+            vitals = VitalsModel(
+                patient_id=patient_id,
+                height=height,
+                weight=weight,
+                blood_pressure=blood_pressure,
+                oxygen_saturation=oxygen_saturation,
+                bmi=bmi,
+                pulse=pulse
+            )
+            vitals.save()
+
+            return redirect("form")
+        
         # If 'optometry_form' is not present, it's a regular patient update form
         customer = get_object_or_404(Users, pk=customer_id)
         customer.patient_id = request.POST.get('patient_id')
@@ -44,6 +69,8 @@ class UpdatePatient(View):
 
         customer.save()
         return redirect('form')
+
+
 
 # delete Data
 class DeletePatient(View):

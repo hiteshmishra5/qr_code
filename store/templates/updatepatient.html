@@ -168,12 +168,22 @@
 
                     <!--Optometry-->
                     <div class = 'row'>
-                        <div class = 'col'>
-                            <label><strong>Optometry</strong></label>
-                            <button type="button" class="plus-button mt-3" style="outline: none;" onclick="openModal()">
-                                <i class="fa-solid fa-plus" style="color: blue; border-radius: 25%; padding: 4px;"></i>
-                            </button>
+                        <div class="col d-flex align-items-center mt-3">
+                            <label class="mr-2"><strong>Optometry</strong></label>
+                            <button type="button" class="btn btn-primary plus-button" style="outline: none; padding: 3px 6px; font-size: 12px;"onclick="openModal()">+</button>
+                        </div>
+                        
+                    </div>
 
+                    <!-- Vitals Button -->
+                    <div class = 'row'>
+                        <div class = 'col'>
+                            <div class="col d-flex align-items-center mt-3">
+                                <label class="mr-2"><strong>Vitals</strong></label>
+                                <button type="button" class="btn btn-primary plus-button" style="outline: none; padding: 3px 6px; font-size: 12px;"onclick="openModal1()">+</button>
+                            </div>
+                            
+                            
                         </div>
                     </div>
 
@@ -201,14 +211,19 @@
         </div>
     </div>
 </div>
-
-<div id="myModal" class="modal" style="max-width: 450px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -43%);">
+<!-- Modal for Optopmetry -->
+<div id="myModal" class="modal rounded" style="max-width: 450px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -43%);">
     <div class="modal-header">
         <span class="close" id="closeModal"><i class="fa-solid fa-xmark"></i></span>
     </div>
-    <div class="card">
+    <div class="card" style="background-color:rgb(238, 244, 238)">
         <div class="card-body">
-            <h3 class="card-title">Optometry</h3>
+            <div class="card-header d-flex justify-content-between align-items-center"style="background-color: #ffc107">
+                <h3 class="card-title">Optometry</h3>
+                <button type="button" id="backbutton" class="close" aria-label="Close" style="background-color: red; border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer;">
+                    <span aria-hidden="true" style="font-size: 18px; color: white;">&times;</span>
+                </button>
+            </div>
             <form id="cardiologist-form" method="post" action="{% url 'optometry' %}">
                 {% csrf_token %}
                 <div class = 'row'>
@@ -281,6 +296,9 @@
                                 <label class="custom-control-label" for="color-vision-red-green">Deficiency</label>
                             </div>
                         </div>
+                        <div class = 'col'>
+                            
+                        </div>
                     </div>
                     <div class="form-group my-form-group">
                         <label for="others">Others</label>
@@ -298,11 +316,88 @@
         </div>
     </div>
 </div>
+</div>
+<!-- Model for Vitals -->
+<div id="vitalsModal" class="modal" style="max-width: 450px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -43%);">
+    <div class="modal-header">
+        <span class="close" id="closeModal"><i class="fa-solid fa-xmark"></i></span>
+    </div>
+    <div class="card" style="background-color:rgb(238, 244, 238)">
+        <div class="card-body">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #ffc107;">
+                <h3 class="card-title">Vitals</h3>
+                <button type="button" id="backButton" class="close" aria-label="Close" style="background-color: red; border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer;">
+                    <span aria-hidden="true" style="font-size: 18px; color: white;">&times;</span>
+                </button>
+                
+                
+            </div>
+            
+            <form id="vitals-form" method="post" action="{% url 'vitals' %}">
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='form-group-my-form-group'>
+                        <label for="patient_id">Patient Id/Employee Id</label>
+                        <input type="text" class="form-control form-control-sm mt-2" name="patient_id" value="{{ customer.patient_id }}" autocomplete="off">
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col'>
+                        <div class="form-group my-form-group">
+                            <label for="height">Height (cm)</label>
+                            <input type="text" id="height" name="height" class="form-control form-control-sm" required>
+                        </div>
+                    </div>
+                    <div class='col'>
+                        <div class="form-group my-form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="text" id="weight" name="weight" class="form-control form-control-sm" required>
+                        </div>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col'>
+                        <div class="form-group my-form-group">
+                            <label for="blood-pressure">Blood Pressure (mmHg)</label>
+                            <input type="text" id="blood-pressure" name="blood_pressure" class="form-control form-control-sm" required>
+                        </div>
+                    </div>
+                    <div class='col'>
+                        <div class="form-group my-form-group">
+                            <label for="oxygen-saturation">Oxygen Saturation (%)</label>
+                            <input type="text" id="oxygen-saturation" name="oxygen_saturation" class="form-control form-control-sm" required>
+                        </div>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col'>
+                        <div class="form-group my-form-group">
+                            <label for="bmi">BMI</label>
+                            <input type="text" id="bmi" name="bmi" class="form-control form-control-sm" required>
+                        </div>
+                    </div>
+                    <div class='col'>
+                        <div class="form-group my-form-group">
+                            <label for="pulse">Pulse</label>
+                            <input type="text" id="pulse" name="pulse" class="form-control form-control-sm" required>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col">
+                        <button type="button" id="submit-vitals" class="btn btn-primary" style="background-color: green; color: white; display: block; margin: 0 auto;">Add</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
 
 <script>
     // Open the optometry form modal
@@ -310,10 +405,9 @@
         var modal = document.getElementById("myModal");
         modal.style.display = "block";
     }
-
-    // Close the modal when the close button is clicked
-    var closeModalButton = document.getElementById("closeModal");
-    closeModalButton.addEventListener("click", function() {
+     // Back button functionality
+    var backButton = document.getElementById("backbutton");
+    backButton.addEventListener("click", function() {
         var modal = document.getElementById("myModal");
         modal.style.display = "none";
     });
@@ -360,11 +454,76 @@
                 console.log(errmsg);
             }
         });
+        
+            // Close the modal
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        });
+  
+        
 
-        // Close the modal
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    });
+
+
+    //Vitals function
+    function openModal1() {
+        var modal = document.getElementById("vitalsModal");
+        modal.style.display = "block";
+
+        // Close the modal when the close button is clicked
+        var closeModalButton = document.getElementById("closeModal");
+        closeModalButton.addEventListener("click", function() {
+            var modal = document.getElementById("vitalsModal");
+            modal.style.display = "none";
+        });
+
+        // Back button functionality
+        var backButton = document.getElementById("backButton");
+        backButton.addEventListener("click", function() {
+            var modal = document.getElementById("vitalsModal");
+            modal.style.display = "none";
+        });
+
+
+        var submitVitalsButton = document.getElementById("submit-vitals");
+        submitVitalsButton.addEventListener("click", function() {
+            console.log("Button clicked");
+
+            // Create the formData object with form field values for Vitals
+            var formDataVitals = {
+                height: document.getElementById("height").value,
+                weight: document.getElementById("weight").value,
+                blood_pressure: document.getElementById("blood-pressure").value,
+                oxygen_saturation: document.getElementById("oxygen-saturation").value,
+                bmi: document.getElementById("bmi").value,
+                pulse: document.getElementById("pulse").value,
+            };
+            console.log(formDataVitals);
+
+            // Get the CSRF token value
+            var csrfTokenVitals = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+            // Use AJAX to send the Vitals form data to the server
+            $.ajax({
+                url: '{% url "vitals" %}',
+                type: 'POST',
+                headers: { 'X-CSRFToken': csrfTokenVitals },
+                data: formDataVitals, // Include the Vitals form data in the request
+                success: function(response) {
+                    // Handle the success response (if needed)
+                    console.log(response);
+                },
+                error: function(xhr, errmsg, err) {
+                    // Handle the error response (if needed)
+                    console.log(errmsg);
+                }
+            });
+
+            // Close the modal
+            var modal = document.getElementById("vitalsModal");
+            modal.style.display = "none";
+        });
+    }
+
 </script>
 
 
