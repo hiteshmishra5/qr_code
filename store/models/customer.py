@@ -1,8 +1,9 @@
 from django.db import models
 from store.models.location import Location
+from django.utils import timezone
 
 class Users(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, default=None, related_name = 'users')
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, default=None, related_name='users')
     patient_id = models.CharField(max_length=100, unique=True, null=True)
     patient_name = models.CharField(max_length=100, null=True)
     age = models.IntegerField(null=True, default=None, blank=True)
@@ -10,7 +11,7 @@ class Users(models.Model):
     phone = models.CharField(max_length=10, null=True, default=None, blank=True)
     email = models.CharField(max_length=50, null=True, blank=True)
     weight = models.IntegerField(null=True, default=None)
-    date_field = models.DateField(default=None)
+    date_field = models.DateField(default=timezone.now)
     current_time = models.DateTimeField(auto_now_add=True)
 
     xray = models.BooleanField(default=False)

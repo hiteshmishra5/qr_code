@@ -4,7 +4,7 @@ from store.Views.login import login
 from store.Views.tech_form import AddPatient, SearchPatient, LogoutView, UploadView
 from store.Views.dashboard import Dashboard
 from store.Views.UpdatePatient import UpdatePatient, DeletePatient
-from store.Views.GoogleDrive import Google
+
 
 
 urlpatterns = [
@@ -17,7 +17,6 @@ urlpatterns = [
     path('upload', UploadView.as_view(), name='upload'),
     path('optometry', UpdatePatient.as_view(), name='optometry'),
     path('vitals', UpdatePatient.as_view(), name='vitals'),
-    path('googledrive', Google.as_view(), name='upload_csv'),
     path('logout/', LogoutView.as_view(), name='logout')
 
 

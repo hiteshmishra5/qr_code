@@ -209,7 +209,7 @@ class UploadView(View):
                     patient.phone = row['phone']
                     patient.email = row['email']
                     patient.weight = row['weight']
-                    patient.address = row['address']
+                    patient.date_field = row['date_field']
                     patient.audiometry = row['audiometry']
                     patient.ecg = row['ecg']
                     patient.optometry = row['optometry']
@@ -217,6 +217,7 @@ class UploadView(View):
                     patient.sample_collection = row['sample_collection']
                     patient.vitals = row['vitals']
                     patient.xray = row['xray']
+
                     patient.save()
                 return redirect('dashboard')
 
