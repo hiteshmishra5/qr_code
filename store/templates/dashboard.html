@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Camp Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 7px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            width: 100%;
+            margin: 5px auto;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th:last-child, td:last-child {
+            border-right: none;
+        }
+
+        th:first-child, td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #fff;
+            z-index: 1;
+        }
+
+        td:first-child {
+            z-index: 2;
+        }
+
+        .table-container {
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .small-dropdown {
+            font-size: 0.70rem;
+            padding: 0.10rem;
+
+        }
+
+        .table-header th {
+            padding: 3px;
+            padding-bottom: 15px;
+        }
+
+        .dropdown-select1 {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-select1 select {
+            width:40%;
+            padding: 5px;
+            font-size: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px; /* Adjust as needed */
+        }
+
+        .dropdown-select1 select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px #007bff;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .hidden-row {
+            display: none;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="container full-screen-card">
+        <div class="card">
+            <div class="card-body">
+                <table class="table" id="tableID">
+                    <thead class='table-header'>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th class='name'>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th class='hidden email'>Email</th>
+                            <th class='hidden phone'>Phone</th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-location-dropdown">
+                                  <div>Location</div>
+                                    <select class="form-control" data-column="6">
+                                        <option value="">All</option>
+                                        {% for location in data.locations %}
+                                            <option value="{{ location.name }}">{{ location.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-date-dropdown">
+                                    <label for="filter-date-select-date">Date</label>
+                                    <select id="filter-date-select-date" class="form-control form-control-sm" data-column="7" onchange="filterTableByDate()">
+                                        <option value="">All</option>
+                                         {% for date1 in data.date %}
+                                         <option value="{{ date1 }}">{{ date1 }}</option>
+                                        {% endfor %}
+                                        <!-- Add more date options as needed -->
+                                    </select>
+                                </div>
+                                
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-xray-dropdown-xray">
+                                    <div>XRAY</div>
+                                    <select class="form-control" data-column="8">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-ecg-dropdown-ecg">
+                                    <div>ECG</div>
+                                    <select class="form-control" data-column="9">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-pft-dropdown-pft">
+                                    <div>PFT</div>
+                                    <select class="form-control" data-column="10">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-audiometry-dropdown-audiometry">
+                                    <div>AUDIO</div>
+                                    <select class="form-control" data-column="11">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-optometry-dropdown-optometry">
+                                    <div>OPTO</div>
+                                    <select class="form-control" data-column="12">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown-select1" id="filter-sputum-dropdown-sputum">
+                                    <div>VITALS</div>
+                                    <select class="form-control" data-column="13">
+                                        <option value="">All</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="scrollable-body">
+                        {% for customer in data.customers %}
+                            <tr>
+                                <td>{{ customer.patient_id }}</td>
+                                <td>{{ customer.patient_name }}</td>
+                                <td>{{ customer.age }}</td>
+                                <td>{{ customer.gender }}</td>
+                                <td class='hidden email'>{{ customer.email }}</td>
+                                <td class='hidden phone'>{{ customer.phone }}</td>
+                                <td>{{ customer.location.name }}</td>
+                                <!-- Update the date column to include the data-date attribute -->
+                                <td data-date="{{ customer.date_field|date:'Y-m-d' }}">{{ customer.date_field|date:'Y-m-d' }}</td>
+                                <td>{% if customer.xray == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.ecg == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.pft == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.audiometry == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.optometry == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                                <td>{% if customer.vitals == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script>
+        //Filter Table by Date
+        function filterTableByDate() {
+            var selectedDate = $("#filter-date-select-date").val();
+
+            $("#tableID tbody tr").each(function () {
+                var rowDateElement = $(this).find("td:eq(7)");
+                var rowDate = new Date(rowDateElement.data("date"));
+
+                if (selectedDate === "" || selectedDate === rowDate.toISOString().slice(0, 10)) {
+                    $(this).removeClass("hidden-row");
+                } else {
+                    $(this).addClass("hidden-row");
+                }
+            });
+        }
+
+
+
+
+        // Function to refresh the page after 30 minutes (30,000 milliseconds)
+        function autoRefresh() {
+            setTimeout(function () {
+                location.reload();
+            }, 300000); // 60,000 milliseconds = 1 min.
+        }
+
+        // Call the autoRefresh function when the page loads
+        window.onload = autoRefresh;
+
+        // Function to filter the table based on dropdown selections
+        function filterTableByDropdown() {
+            var filters = {};
+
+            // Loop through each dropdown select element and get the selected value
+            document.querySelectorAll('.dropdown-select1 select').forEach(function (select) {
+                var column = select.getAttribute('data-column');
+                var value = select.value;
+
+                filters[column] = value;
+            });
+
+            // Loop through each table row and check if it matches the filter criteria
+            document.querySelectorAll('.scrollable-body tr').forEach(function (row) {
+                var showRow = true;
+
+                // Check each filter criteria
+                for (var column in filters) {
+                    if (filters[column] !== "" && row.cells[column].textContent !== filters[column]) {
+                        showRow = false;
+                        break;
+                    }
+                }
+
+                // Show or hide the row based on the filter criteria
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // Attach the filterTableByDropdown function to the change event of dropdowns
+        document.querySelectorAll('.dropdown-select1 select').forEach(function (select) {
+            select.addEventListener('change', filterTableByDropdown);
+        });
+
+        /*Location Filter by Divyansh 19 dec 2023*/
+        // Retrieve the saved value from localStorage
+        // var selectedLocation = localStorage.getItem('selectedLocation');
+
+        // // Set the selected value in the dropdown
+        // if (selectedLocation) {
+        //     document.getElementById('location-filter').value = selectedLocation;
+        // }
+
+        // // Add an event listener to the dropdown to save the selected value in localStorage
+        // document.getElementById('location-filter').addEventListener('change', function () {
+        //     var selectedValue = this.value;
+        //     localStorage.setItem('selectedLocation', selectedValue);
+        // });
+    </script>
+
+
+</body>
+
+</html>

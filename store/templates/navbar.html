@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            border-radius: 5px;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .rounded-card {
+            background-color: white;
+            color: black;
+            border-radius: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+
+        .patient-count {
+            width: 120px;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        {% if data.coordinator.registration_type_id == 1  %}
+        <div class='row'>
+            <div class="col">
+                <div class="rounded-card">
+                    <div class = 'col'>
+                        <div class="patient-count" id="xray-count">XRAY <strong>{{data.count.xray}}</strong></div>
+                        <div class="patient-count" id="ecg-count">ECG <strong>{{data.count.ecg}}</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="rounded-card">
+                    <div class = 'col'>
+                        <div class="patient-count" id="pft-count">PFT <strong>{{data.count.pft}}</strong></div>
+                        <div class="patient-count" id="audio-count">AUDIO <strong>{{data.count.audiometry}}</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="rounded-card">
+                    <div class = 'col'>
+                        <div class="patient-count" id="opto-count">OPTO <strong>{{data.count.optometry}}</strong></div>
+                        <div class="patient-count" id="sputum-count">SPUTUM <strong>{{data.count.sputum}}</strong></div>
+                    </div>
+                </div>
+            </div>
+            <form method='get' id="locationForm">
+                <select class="form-control mr-auto" id="locationDropdown" style="width: 200px; margin-left: 0; padding-left: 0;" onchange="updateModalities()">
+                    <option value="all" {% if not request.GET.location %}selected{% endif %}>All</option>
+                    {% for location in data.locations %}
+                        <option value="{{ location.id }}" {% if request.GET.location == location.id %}selected{% endif %}>{{ location.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            
+            <script>
+                // Restore selected location from session storage on page load
+                document.addEventListener("DOMContentLoaded", function() {
+                    var selectedLocation = sessionStorage.getItem("selectedLocation");
+                    if (selectedLocation !== null) {
+                        document.getElementById("locationDropdown").value = selectedLocation;
+                    }
+                });
+            
+                function updateModalities() {
+                    var selectedLocation = document.getElementById("locationDropdown").value;
+                    sessionStorage.setItem("selectedLocation", selectedLocation);
+                    window.location.href = "{% url 'dashboard' %}?location=" + selectedLocation;
+                }
+            </script>
+            
+            
+        </div>
+        
+        <div class = 'col'>
+        <div class = 'col d-flex justify-content-end '>
+            <div class="navbar"> 
+                
+                <button id="myButton"  onclick="handleSendWhatsAppMessage()" style="padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Send Updates</button>
+                
+
+                <script>
+                    // console.log("hello!!");
+                    function  handleSendWhatsAppMessage(){const urlSearchParams = new URLSearchParams(window.location.search);
+                        // var xrayCountElement = document.getElementById("xray-count");
+                        // var xrayCountValue = xrayCountElement.querySelector('strong').textContent;
+                        // const me = `This is an automated message ${xrayCountValue}`;
+
+                        // // Log the message to the console
+                        // console.log(me);
+                        // Get the element by ID
+                        // Get the text content of the <strong> element inside the xray-count element
+                        var xrayCountElement = document.getElementById("xray-count");
+                        var xrayCountValue = xrayCountElement.querySelector('strong').textContent;
+                        //ecg
+                        var ecgCountElement = document.getElementById("ecg-count");
+                        var ecgCountValue = ecgCountElement.querySelector('strong').textContent;
+                        //pft
+                        var pftCountElement = document.getElementById("pft-count");
+                        var pftCountValue = pftCountElement.querySelector('strong').textContent;
+                        //audio
+                        var audioCountElement = document.getElementById("audio-count");
+                        var audioCountValue = audioCountElement.querySelector('strong').textContent;
+                        //opto
+                        var optoCountElement = document.getElementById("opto-count");
+                        var optoCountValue = optoCountElement.querySelector('strong').textContent;
+                        //sputum
+                        var sputumCountElement = document.getElementById("sputum-count");
+                        var sputumCountValue = sputumCountElement.querySelector('strong').textContent;
+                        
+                        const locationId = urlSearchParams.get("location");
+                        if (locationId ==1) {
+                            var location = "TCS Hyderabad";
+                        } else if (locationId ==2) {
+                            var location = "Healthians Yamunanagar";
+                        } else if (locationId ==3) {
+                            var location = "Meghalaya Tb Screening";
+                        } else if (locationId ==4){
+                            var location = "Gujarat North Star";
+                        }else{
+                            var location = "All Locations"
+                        }
+
+                        // Construct the WhatsApp message URL
+                        const phoneNumber = '+917379412633'; // Replace with the recipient's phone number
+                        const message = `COUNT MODALITIES for ${location}:\nXRAY:${xrayCountValue}\nECG:${ecgCountValue}\nPFT:${pftCountValue}\nAUDIO:${audioCountValue}\nOPTO:${optoCountValue}\nSPUTUM:${sputumCountValue}`;
+                        const whatsappMessageURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                        console.log(message);
+                        // Try to open the WhatsApp chat window
+                        const newWindow = window.open(whatsappMessageURL, '_blank');
+
+                        // Check if the new window was successfully opened
+                        if (newWindow) {
+                            newWindow.focus(); // Bring the window to the front
+                        } else {
+                        // Handle the case where the browser blocks pop-up windows
+                        // You can display a message or provide an alternative way to contact the recipient.
+                        alert('Please enable pop-ups to open WhatsApp chat.');
+                        }
+                    }
+                
+                </script>
+                
+            </div>
+            {% endif %}
+
+
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle mt-2" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <strong>Actions</strong>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="/upload" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item"><strong>Upload Excel</strong></button>
+                </form>
+                <button class="dropdown-item download-button" onclick="downloadExcel()"><strong>Get Excel</strong></button>
+                <a href="/logout" class="dropdown-item logout-button"><strong>Logout</strong></a>
+            </div>
+        </div>
+
+        </div>
+
+
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-ojvDy9z1q8u3I+pa2jSn8a9z9LXNU2UZ+MW0EzIbOi7wA1kZ6Uqpm8p7l1r44tx" crossorigin="anonymous"></script> -->
+    
+   
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
+    <script>
+
+        function downloadExcel() {
+            /* Get the table data and convert it to a worksheet */
+            var table = document.querySelector('.table');
+
+            // Clone the table to avoid modifying the original
+            var clonedTable = table.cloneNode(true);
+
+            // Exclude elements with class "form-control" within elements with class "dropdown-select1"
+            var excludedElements = clonedTable.querySelectorAll('.dropdown-select1 .form-control');
+            excludedElements.forEach(function (element) {
+                element.parentNode.removeChild(element);
+            });
+
+            var ws = XLSX.utils.table_to_sheet(clonedTable);
+
+            /* Create a workbook containing the worksheet */
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+            /* Save the workbook as an Excel file */
+            XLSX.writeFile(wb, 'dashboard_data.xlsx');
+        }
+        
+
+</script>
+
+</body>
+
+</html>

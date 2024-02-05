@@ -1,0 +1,420 @@
+    {% extends 'base.html' %}
+
+    {% block content%}
+
+    {% include 'navbar.html' %}
+
+
+    <!--Signup-->
+    <div class = "scrollable-container">
+    <div class = "p-4">
+    <div class = "row">
+        <div class = "col-lg-4 border rounded px-4 py-3">
+            <div class = "col">
+                <div class = "text-center">
+                    <h3 class= "text-center bg-info alert">Add New Patient</h3>
+                </div>
+                <form method="POST" action="{% url 'form' %}">
+                  {% csrf_token %}
+                  {% if error %}
+                    <div class = "alert alert-danger" role = "alert">
+                        {{error}}
+                    </div>
+                    {% endif %}
+
+                    <!--Patient Name and Age-->
+                    <div class="row form-group mt-2">
+                        <div class="col">
+                            <label>Patient Id/Employee Id</label>
+                            <input required type="text" name="patient_id" id="patient_id" value="{{ value.patient_id }}" class="form-control form-control-sm">
+                        </div>
+                        <div class="col">
+                            <label for="barcode-scanner">Barcode Scanner</label>
+                            <div id="scrollable-container1" style="background-color: #fff;">
+                                <video id="barcode-scanner" width="300" height="200"></video>
+                            </div>
+                            <button type="button" id="open-scanner" class="btn btn-primary mt-2">Open Scanner</button>
+                        </div>
+                    </div>
+
+                    <div class= "row">
+                      <div class="col">
+                        <div class="form-group mt-2">
+                          <label>Patient Name</label>
+                          <input required type="text" name="patient_name" value = "{{values.patient_name}}" class="form-control form-control-sm">
+                        </div>
+                      </div>
+                      <div class = "col">
+                        <div class="form-group mt-2">
+                          <label>Age</label>
+                          <input required type="number" name="age" value = "{{values.age}}" class="form-control form-control-sm">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--gender and weight-->
+                    <div class = "row">
+                      <div class = "col">
+                        <div class="form-group mt-2">
+                          <label>Gender</label>
+                            <select name="gender" id="gender" class="form-control btn-sm" required>
+                              <option value="">Select Gender</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                              <option value="other">Other</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class = 'col'>
+                        <div class="form-group mt-2">
+                          <label >Weight</label>
+                          <input required type="number" name="weight" value = "{{values.weight}}" class="form-control form-control-sm">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--phone and email -->
+                    <div class = "row">
+                        <div class = "col">
+                            <div class="form-group mt-2">
+                                <label >Phone</label>
+                                <input required type="text" name="phone" value = "{{values.phone}}" class="form-control form-control-sm" placeholder="9988776655">
+                            </div>
+                        </div>
+                        <div class = "col">
+                            <div class="form-group mt-2">
+                                <label >Email</label>
+                                <input required type="email" name="email" value = "{{values.email}}" class="form-control form-control-sm" placeholder="example@gmail.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mt-2">
+                            <label for="location-select">Location</label>
+                            <select id="location-select" name="location-select" class="form-control form-control-sm" required>
+                                <option value="">Select Location</option>
+                                {% for location in locations %}
+                                    <option value="{{ location.id }}">{{ location.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col mt-2">
+                            <label for="date-select">Date</label>
+                            <div class="form-group" id="date-dropdown">
+                                <input required type="date" id="date-select" name="date-select" class="form-control form-control-sm"  pattern="\d{4}-\d{2}-\d{2}">
+                            </div>
+                        </div>
+                    </div>
+
+                 <!--Button-->
+                    <div class= "form-group text-center mt-2">
+                        <input type="submit" name = "submit" value="Add" class="btn btn-warning mt-2">
+                    </div>
+               </form>
+            </div>
+        </div>
+
+        <div class="col-sm-7 border rounded px-4 py-3 offset-sm-1" style="position: sticky; top: 0; height: fit-content;">
+            <div class="col">
+            <h4 class="text-center bg-warning alert">Show Patient Details</h4>
+            <form action="/search" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success">Go</button>
+                    </div>
+                    <!-- <div class="input-group-append" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
+                        <!-- <button type="button" class="refresh" onclick="refreshPage()">
+                            <i style="font-size: 19px" class="fa">&#xf021;</i>
+                        </button>
+                    </div> -->
+                </div>
+            </form>
+
+            <div id="scrollable-container">
+              {% if customers %}
+                <form method="POST" action="{% url 'form' %}">
+                    {% csrf_token %}
+                    <div class="outer-wrapper">
+                        <div class="table-wrapper">
+                <table class="table table-hover">
+                    <thead class="header">
+                    <tr class="sticky">
+                      <th class="sticky-header">Patient Name</th>
+                      <th class="sticky-header">X-Ray</th>
+                      <th class="sticky-header">ECG</th>
+                      <th class="sticky-header">PFT</th>
+                      <th class="sticky-header">Audio</th>
+                      <th class="sticky-header">Opto</th>
+                      <th class="sticky-header">Vitals</th>
+                      <th class="sticky-header">Buttons</th>
+
+                    </tr>
+                  </thead>
+                  <style>
+                  .header {
+                    position: sticky;
+                    top: 0;
+                    background-color: white;
+                    z-index: 1;
+                    width: fit-content;
+                    }
+                    .sticky-header {
+    position: relative; /* Reset the position */
+    }
+
+                </style>
+                  <tbody class="scrollable-body">
+                    {% for customer in customers %}
+                    <tr>
+                      <td>{{ customer.patient_name }}</td>
+                      <td>
+                        <input type="checkbox" id="xray" name="xray+{{customer.patient_id}}" {% if customer.xray %}checked{% endif %}>
+                      </td>
+                      <td>
+                        <input type="checkbox" id="ecg" name="ecg+{{customer.patient_id}}" {% if customer.ecg %}checked{% endif %}>
+                      </td>
+                      <td>
+                        <input type="checkbox" id="pft" name="pft+{{customer.patient_id}}" {% if customer.pft %}checked{% endif %}>
+                      </td>
+                      <td>
+                        <input type="checkbox" id="audiometry" name="audiometry+{{customer.patient_id}}" {% if customer.audiometry %}checked{% endif %}>
+                      </td>
+                      <td>
+                        <input type="checkbox" id="optometry" name="optometry+{{customer.patient_id}}" {% if customer.optometry %}checked{% endif %}>
+                      </td>
+                      <td>
+                        <input type="checkbox" id="sputum" name="sputum+{{customer.patient_id}}" {% if customer.sputum %}checked{% endif %}>
+                      </td>
+    <!--                      <td>-->
+    <!--                        <input type="checkbox" id="sample_collection" name="sample_collection_{{customer.patient_id}}" {% if customer.sample_collection %}checked{% endif %}>-->
+    <!--                      </td>-->
+                      <td>
+                        <div class="d-flex">
+                          <a href="{% url 'update_patient' customer_id=customer.id %}" class="btn btn-success btn-sm mx-1">Edit</a>
+                            <input type="hidden" name="patient_id" value="{{ customer.patient_id }}">
+                            <button type="submit" class="btn btn-primary btn-sm" name="save_modalities">Save</button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                </div>
+    </div>
+                </form>
+              {% else %}
+              <h4 class="text-center">No Records</h4>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+    <script>
+
+    // Function to refresh the page and call Google Drive URLs
+    async function refreshPage() {
+        try {
+            const response = await fetch('/googledrive');
+            if (response.ok) {
+                console.log('Google Drive URLs successfully called');
+            } else {
+                console.error('Error calling Google Drive URLs');
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        } finally {
+            setTimeout(() => {
+                location.reload();
+            }, 2000); // Adjust the delay (in milliseconds) before refreshing the page
+        }
+    }
+
+    // ... Your existing Instascan and other JavaScript code ...
+
+    // Example of calling refreshPage function
+    document.getElementById('refresh-button').addEventListener('click', function () {
+        refreshPage();
+    });
+
+
+
+    const scanner = new Instascan.Scanner({
+        video: document.getElementById('barcode-scanner')
+    });
+
+    scanner.addListener('scan', function (content) {
+        // Fill the scanned data into the patient_id field
+        document.getElementById('patient_id').value = content;
+    });
+
+    // Function to get the back camera
+    function getBackCamera() {
+        return new Promise((resolve, reject) => {
+            navigator.mediaDevices.enumerateDevices()
+                .then(devices => {
+                    const backCameras = devices.filter(device => device.kind === 'videoinput' && device.label.toLowerCase().includes('back'));
+                    resolve(backCameras[0]);
+                })
+                .catch(error => reject(error));
+        });
+    }
+
+    // Start the scanner when the page is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        getBackCamera().then(backCamera => {
+            if (backCamera) {
+                navigator.mediaDevices.getUserMedia({
+                    video: {
+                        deviceId: { exact: backCamera.deviceId },
+                        facingMode: 'environment', // Use 'environment' for back camera
+                        width: { ideal: 1280 },    // Adjust width and height if needed
+                        height: { ideal: 720 }
+                    }
+                }).then(stream => {
+                    document.getElementById('barcode-scanner').srcObject = stream;
+                }).catch(error => {
+                    console.error('Error accessing back camera:', error);
+                });
+            } else {
+                console.error('Back camera not found.');
+            }
+        });
+    });
+
+    // Handle the button click to open the scanner
+    document.getElementById('open-scanner').addEventListener('click', function () {
+        scanner.start();
+    });
+
+
+
+
+    </script>
+
+
+    <style>
+
+     /* Force styles with !important */
+    .row .col input[type="date"] {
+        width: 100% !important;
+        padding: 5px !important;
+        font-size: 14px !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+    }
+
+    /* Force styles with !important for location select */
+    .row .col select#location-select {
+        width: 100% !important;
+        padding: 5px !important;
+        font-size: 14px !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+    }
+
+
+     #edit {
+      margin-bottom: 15px;
+     }
+
+    #barcode-scanner {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 10;
+      display: block;
+    }
+
+    #scrollable-container {
+        max-height: 400px;
+        overflow-y: auto;
+
+    }
+    #scrollable-container1 {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 10;
+      display: block;
+    }
+    .scrollable-body {
+        max-height: 300px; /* Adjust the maximum height according to your needs */
+        position: relative;
+    }
+
+    /* .sticky-header {
+        position: sticky;
+        top: 0;
+        background-color: blue;
+        z-index: 1;
+        overflow: hidden;
+    } */
+
+
+
+
+
+    #location-select,
+    #date-select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    #date-dropdown {
+        position: relative;
+    }
+
+    #date-select::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: auto;
+        height: auto;
+        padding: 8px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .refresh {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        font-size: 14px;
+    }
+
+
+
+    </style>
+
+    {% endblock %}
