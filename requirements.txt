@@ -5,3 +5,4 @@ pytz==2020.1
 sqlparse==0.4.1
  
 https://docs.google.com/forms/d/e/1FAIpQLSe7yhrre_YvqM4brxFdzwlnQOE4aicBA1lqtXVvXUQwqaJDUw/viewform
+https://docs.google.com/forms/d/e/1FAIpQLSeaDd1mZ-NpbIEaKWN2KCOkJT2eKZUfqDMQLPL7LAb3YLWxRg/viewform
