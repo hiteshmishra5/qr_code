@@ -1,11 +1,177 @@
-    {% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+{% load tz %} {% load static %}
+<head>
+  <title>Registration Form</title>
+  <link rel="stylesheet" href="{% static 'resource/css/main.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-    {% block content%}
+<style>
 
-    {% include 'navbar.html' %}
+    .row .col input[type="date"] {
+        width: 100% !important;
+        padding: 5px !important;
+        font-size: 14px !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+    }
+
+    /* Force styles with !important for location select */
+    .row .col select#location-select {
+        width: 100% !important;
+        padding: 5px !important;
+        font-size: 14px !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+    }
 
 
-    <!--Signup-->
+     #edit {
+      margin-bottom: 15px;
+     }
+
+    #barcode-scanner {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 10;
+      display: block;
+    }
+
+    #scrollable-container {
+        max-height: 400px;
+        overflow-y: auto;
+
+    }
+    #scrollable-container1 {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 10;
+      display: block;
+    }
+    .scrollable-body {
+        max-height: 300px; /* Adjust the maximum height according to your needs */
+        position: relative;
+    }
+
+    /* .sticky-header {
+        position: sticky;
+        top: 0;
+        background-color: blue;
+        z-index: 1;
+        overflow: hidden;
+    } */
+    #location-select,
+    #date-select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    #date-dropdown {
+        position: relative;
+    }
+
+    #date-select::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: auto;
+        height: auto;
+        padding: 8px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .refresh {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        font-size: 14px;
+    }
+
+     /* CSS styling for search box */
+    #myInput {
+        width: 100%;
+        padding: 8px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    /* Additional styling for modality names */
+    .modalities {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .modalities span {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        padding: 2px 8px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 1;
+        width: fit-content;
+    }
+    .sticky-header {
+        position: relative; /* Reset the position */
+    }
+
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Camp Registration</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="/logout" class="nav-link">
+                            <button class="logout-button btn btn-sm btn-danger"><strong>Logout</strong></button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class = "scrollable-container">
     <div class = "p-4">
     <div class = "row">
@@ -24,16 +190,14 @@
 
                     <!--Patient Name and Age-->
                     <div class="row form-group mt-2">
-                        <div class="col">
+                         <div class="col">
                             <label>Patient Id/Employee Id</label>
-                            <input required type="text" name="patient_id" id="patient_id" value="{{ value.patient_id }}" class="form-control form-control-sm">
-                        </div>
-                        <div class="col">
-                            <label for="barcode-scanner">Barcode Scanner</label>
-                            <div id="scrollable-container1" style="background-color: #fff;">
-                                <video id="barcode-scanner" width="300" height="200"></video>
+                            <div class="input-group">
+                                <input required type="text" name="patient_id" id="patient_id" value="{{ value.patient_id }}" class="form-control form-control-sm">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary" onclick="accessCamera()">Access Camera</button>
+                                </div>
                             </div>
-                            <button type="button" id="open-scanner" class="btn btn-primary mt-2">Open Scanner</button>
                         </div>
                     </div>
 
@@ -118,15 +282,9 @@
         <div class="col-sm-7 border rounded px-4 py-3 offset-sm-1" style="position: sticky; top: 0; height: fit-content;">
             <div class="col">
             <h4 class="text-center bg-warning alert">Show Patient Details</h4>
-            <form action="/search" method="GET">
-                <div class="input-group mb-3">
-                    <input type="text" name="search" class="form-control" placeholder="Search">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-success">Go</button>
-                    </div>
-
-                </div>
-            </form>
+            <div class='search-google'>
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names/IDs/Test Date" title="Type in a name">
+            </div>
 
             <div id="scrollable-container">
               {% if customers %}
@@ -137,34 +295,30 @@
                 <table class="table table-hover">
                     <thead class="header">
                     <tr class="sticky">
+                        <th class="sticky-header">Patient ID</th>
                       <th class="sticky-header">Patient Name</th>
+                      <th class="sticky-header">Registration</th>
                       <th class="sticky-header">X-Ray</th>
                       <th class="sticky-header">ECG</th>
                       <th class="sticky-header">PFT</th>
                       <th class="sticky-header">Audio</th>
                       <th class="sticky-header">Opto</th>
                       <th class="sticky-header">Vitals</th>
-                      <th class="sticky-header">Buttons</th>
+                        <th class="sticky-header">Blood</th>
+                      <th class="sticky-header">Actions</th>
+
 
                     </tr>
                   </thead>
-                  <style>
-                  .header {
-                    position: sticky;
-                    top: 0;
-                    background-color: white;
-                    z-index: 1;
-                    width: fit-content;
-                    }
-                    .sticky-header {
-    position: relative; /* Reset the position */
-    }
 
-                </style>
                   <tbody class="scrollable-body">
                     {% for customer in customers %}
                     <tr>
+                        <td>{{ customer.patient_id }}</td>
                       <td>{{ customer.patient_name }}</td>
+                        <td>
+                        <input type="checkbox" id="registration" name="registration+{{customer.patient_id}}" {% if customer.registration %}checked{% endif %}>
+                      </td>
                       <td>
                         <input type="checkbox" id="xray" name="xray+{{customer.patient_id}}" {% if customer.xray %}checked{% endif %}>
                       </td>
@@ -181,11 +335,11 @@
                         <input type="checkbox" id="optometry" name="optometry+{{customer.patient_id}}" {% if customer.optometry %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="sputum" name="sputum+{{customer.patient_id}}" {% if customer.sputum %}checked{% endif %}>
+                        <input type="checkbox" id="vitals" name="vitals+{{customer.patient_id}}" {% if customer.vitals %}checked{% endif %}>
                       </td>
-    <!--                      <td>-->
-    <!--                        <input type="checkbox" id="sample_collection" name="sample_collection_{{customer.patient_id}}" {% if customer.sample_collection %}checked{% endif %}>-->
-    <!--                      </td>-->
+                      <td>
+                        <input type="checkbox" id="sample_collection" name="sample_collection+{{customer.patient_id}}" {% if customer.sample_collection %}checked{% endif %}>
+                      </td>
                       <td>
                         <div class="d-flex">
                           <a href="{% url 'update_patient' customer_id=customer.id %}" class="btn btn-success btn-sm mx-1">Edit</a>
@@ -198,7 +352,7 @@
                   </tbody>
                 </table>
                 </div>
-    </div>
+            </div>
                 </form>
               {% else %}
               <h4 class="text-center">No Records</h4>
@@ -208,209 +362,80 @@
         </div>
         </div>
     </div>
-
-
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("scrollable-container").getElementsByTagName("table")[0]; // Updated to target the correct table
+            tr = table.getElementsByTagName("tr");
 
+            for (i = 1; i < tr.length; i++) { // Updated starting index to exclude header row
+                var found = false;
+                var columns = tr[i].getElementsByTagName("td");
+                for (var j = 0; j < columns.length - 1; j++) { // Exclude the last column (Actions)
+                    td = columns[j];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                // Additionally, search by patient ID
+                var patientId = tr[i].getElementsByTagName("td")[0]; // Assuming patient ID is in the first column
+                if (patientId) {
+                    var patientIdText = patientId.textContent || patientId.innerText;
+                    if (patientIdText.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                    }
+                }
 
+                if (found) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    </script>
 
     <script>
+        function accessCamera() {
+            // Access the device camera
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    // Get the video element
+                    var videoElement = document.createElement('video');
+                    // Set the stream as the source of the video element
+                    videoElement.srcObject = stream;
+                    // Play the video
+                    videoElement.play();
 
-    // Function to refresh the page and call Google Drive URLs
-    async function refreshPage() {
-        try {
-            const response = await fetch('/googledrive');
-            if (response.ok) {
-                console.log('Google Drive URLs successfully called');
-            } else {
-                console.error('Error calling Google Drive URLs');
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
-        } finally {
-            setTimeout(() => {
-                location.reload();
-            }, 2000); // Adjust the delay (in milliseconds) before refreshing the page
-        }
-    }
-
-    // ... Your existing Instascan and other JavaScript code ...
-
-    // Example of calling refreshPage function
-    document.getElementById('refresh-button').addEventListener('click', function () {
-        refreshPage();
-    });
-
-
-
-    const scanner = new Instascan.Scanner({
-        video: document.getElementById('barcode-scanner')
-    });
-
-    scanner.addListener('scan', function (content) {
-        // Fill the scanned data into the patient_id field
-        document.getElementById('patient_id').value = content;
-    });
-
-    // Function to get the back camera
-    function getBackCamera() {
-        return new Promise((resolve, reject) => {
-            navigator.mediaDevices.enumerateDevices()
-                .then(devices => {
-                    const backCameras = devices.filter(device => device.kind === 'videoinput' && device.label.toLowerCase().includes('back'));
-                    resolve(backCameras[0]);
+                    // Append the video element to the body or any other container
+                    document.body.appendChild(videoElement);
                 })
-                .catch(error => reject(error));
-        });
-    }
-
-    // Start the scanner when the page is loaded
-    document.addEventListener('DOMContentLoaded', function () {
-        getBackCamera().then(backCamera => {
-            if (backCamera) {
-                navigator.mediaDevices.getUserMedia({
-                    video: {
-                        deviceId: { exact: backCamera.deviceId },
-                        facingMode: 'environment', // Use 'environment' for back camera
-                        width: { ideal: 1280 },    // Adjust width and height if needed
-                        height: { ideal: 720 }
-                    }
-                }).then(stream => {
-                    document.getElementById('barcode-scanner').srcObject = stream;
-                }).catch(error => {
-                    console.error('Error accessing back camera:', error);
+                .catch(function (error) {
+                    // Handle errors
+                    console.error('Error accessing the camera: ', error);
+                    alert('Error accessing the camera. Please make sure your device supports camera access and it is not blocked.');
                 });
-            } else {
-                console.error('Back camera not found.');
-            }
-        });
-    });
-
-    // Handle the button click to open the scanner
-    document.getElementById('open-scanner').addEventListener('click', function () {
-        scanner.start();
-    });
-
-
-
-
+        }
     </script>
 
 
-    <style>
-
-     /* Force styles with !important */
-    .row .col input[type="date"] {
-        width: 100% !important;
-        padding: 5px !important;
-        font-size: 14px !important;
-        border: 1px solid #ccc !important;
-        border-radius: 5px !important;
-    }
-
-    /* Force styles with !important for location select */
-    .row .col select#location-select {
-        width: 100% !important;
-        padding: 5px !important;
-        font-size: 14px !important;
-        border: 1px solid #ccc !important;
-        border-radius: 5px !important;
-    }
 
 
-     #edit {
-      margin-bottom: 15px;
-     }
 
-    #barcode-scanner {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      z-index: 10;
-      display: block;
-    }
+</body>
 
-    #scrollable-container {
-        max-height: 400px;
-        overflow-y: auto;
-
-    }
-    #scrollable-container1 {
-      position: absolute;
-      right: 0;
-      top: 0;
-      z-index: 10;
-      display: block;
-    }
-    .scrollable-body {
-        max-height: 300px; /* Adjust the maximum height according to your needs */
-        position: relative;
-    }
-
-    /* .sticky-header {
-        position: sticky;
-        top: 0;
-        background-color: blue;
-        z-index: 1;
-        overflow: hidden;
-    } */
+</html>
 
 
 
 
 
-    #location-select,
-    #date-select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 8px;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
 
-    #date-dropdown {
-        position: relative;
-    }
-
-    #date-select::-webkit-calendar-picker-indicator {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: auto;
-        height: auto;
-        padding: 8px;
-        margin: 0;
-        cursor: pointer;
-    }
-
-    .refresh {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-    }
-
-    .popup {
-        display: none;
-        position: fixed;
-        bottom: 10px;
-        right: 10px;
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 5px;
-        z-index: 1000;
-    }
-
-    .popup-content {
-        font-size: 14px;
-    }
-
-
-
-    </style>
-
-    {% endblock %}
