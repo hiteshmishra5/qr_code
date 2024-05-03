@@ -175,7 +175,7 @@
     <div class = "scrollable-container">
     <div class = "p-4">
     <div class = "row">
-        <div class = "col-lg-4 border rounded px-4 py-3">
+        <div class = "col-lg-3 border rounded px-4 py-3">
             <div class = "col">
                 <div class = "text-center">
                     <h3 class= "text-center bg-info alert">Add New Patient</h3>
@@ -192,12 +192,7 @@
                     <div class="row form-group mt-2">
                          <div class="col">
                             <label>Patient Id/Employee Id</label>
-                            <div class="input-group">
-                                <input required type="text" name="patient_id" id="patient_id" value="{{ value.patient_id }}" class="form-control form-control-sm">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" onclick="accessCamera()">Access Camera</button>
-                                </div>
-                            </div>
+                             <input type="text" name="patient_id" id="patient_id" value="{{ value.patient_id }}" class="form-control form-control-sm">
                         </div>
                     </div>
 
@@ -229,22 +224,17 @@
                             </select>
                         </div>
                       </div>
-                      <div class = 'col'>
-                        <div class="form-group mt-2">
-                          <label >Weight</label>
-                          <input required type="number" name="weight" value = "{{values.weight}}" class="form-control form-control-sm">
-                        </div>
-                      </div>
-                    </div>
-
-                    <!--phone and email -->
-                    <div class = "row">
                         <div class = "col">
                             <div class="form-group mt-2">
                                 <label >Phone</label>
                                 <input required type="text" name="phone" value = "{{values.phone}}" class="form-control form-control-sm" placeholder="9988776655">
                             </div>
                         </div>
+                    </div>
+
+                    <!--phone and email -->
+                    <div class = "row">
+
                         <div class = "col">
                             <div class="form-group mt-2">
                                 <label >Email</label>
@@ -279,7 +269,7 @@
             </div>
         </div>
 
-        <div class="col-sm-7 border rounded px-4 py-3 offset-sm-1" style="position: sticky; top: 0; height: fit-content;">
+        <div class="col-sm-8 border rounded px-4 py-3 offset-sm-1" style="position: sticky; top: 0; height: fit-content;">
             <div class="col">
             <h4 class="text-center bg-warning alert">Show Patient Details</h4>
             <div class='search-google'>
@@ -295,8 +285,11 @@
                 <table class="table table-hover">
                     <thead class="header">
                     <tr class="sticky">
+                        <th class="sticky-header">XRAi ID</th>
                         <th class="sticky-header">Patient ID</th>
                       <th class="sticky-header">Patient Name</th>
+                      <th class="sticky-header">Age</th>
+                      <th class="sticky-header">Gender</th>
                       <th class="sticky-header">Registration</th>
                       <th class="sticky-header">X-Ray</th>
                       <th class="sticky-header">ECG</th>
@@ -305,8 +298,8 @@
                       <th class="sticky-header">Opto</th>
                       <th class="sticky-header">Vitals</th>
                         <th class="sticky-header">Blood</th>
+                        <th class="sticky-header">pathology</th>
                       <th class="sticky-header">Actions</th>
-
 
                     </tr>
                   </thead>
@@ -314,8 +307,11 @@
                   <tbody class="scrollable-body">
                     {% for customer in customers %}
                     <tr>
+                        <td>{{customer.xrai_id}}</td>
                         <td>{{ customer.patient_id }}</td>
                       <td>{{ customer.patient_name }}</td>
+                      <td>{{ customer.age }}</td>
+                      <td>{{ customer.gender }}</td>
                         <td>
                         <input type="checkbox" id="registration" name="registration+{{customer.patient_id}}" {% if customer.registration %}checked{% endif %}>
                       </td>
@@ -339,6 +335,9 @@
                       </td>
                       <td>
                         <input type="checkbox" id="sample_collection" name="sample_collection+{{customer.patient_id}}" {% if customer.sample_collection %}checked{% endif %}>
+                      </td>
+                        <td>
+                        <input type="checkbox" id="pathology" name="pathology+{{customer.patient_id}}" {% if customer.pathology %}checked{% endif %}>
                       </td>
                       <td>
                         <div class="d-flex">
@@ -403,28 +402,43 @@
         }
     </script>
 
-    <script>
-        function accessCamera() {
-            // Access the device camera
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function (stream) {
-                    // Get the video element
-                    var videoElement = document.createElement('video');
-                    // Set the stream as the source of the video element
-                    videoElement.srcObject = stream;
-                    // Play the video
-                    videoElement.play();
+<!--    <script>-->
+<!--        function accessCamera() {-->
+<!--            var constraints = {};-->
 
-                    // Append the video element to the body or any other container
-                    document.body.appendChild(videoElement);
-                })
-                .catch(function (error) {
-                    // Handle errors
-                    console.error('Error accessing the camera: ', error);
-                    alert('Error accessing the camera. Please make sure your device supports camera access and it is not blocked.');
-                });
-        }
-    </script>
+<!--            // Detect if the user is using a mobile device-->
+<!--            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);-->
+
+<!--            // If the user is on a mobile device, try to access the back camera-->
+<!--            if (isMobile) {-->
+<!--                constraints = { video: { facingMode: 'environment' } }; // Use 'environment' for back camera-->
+<!--            } else {-->
+<!--                // If not on a mobile device, try to access the front camera-->
+<!--                constraints = { video: { facingMode: 'user' } }; // Use 'user' for front camera-->
+<!--            }-->
+
+<!--            // Access the device camera-->
+<!--            navigator.mediaDevices.getUserMedia(constraints)-->
+<!--                .then(function (stream) {-->
+<!--                    // Get the video element-->
+<!--                    var videoElement = document.createElement('video');-->
+<!--                    // Set the stream as the source of the video element-->
+<!--                    videoElement.srcObject = stream;-->
+<!--                    // Play the video-->
+<!--                    videoElement.play();-->
+
+<!--                    // Append the video element to the body or any other container-->
+<!--                    document.body.appendChild(videoElement);-->
+<!--                })-->
+<!--                .catch(function (error) {-->
+<!--                    // Handle errors-->
+<!--                    console.error('Error accessing the camera: ', error);-->
+<!--                    alert('Error accessing the camera. Please make sure your device supports camera access and it is not blocked.');-->
+<!--                });-->
+<!--        }-->
+
+
+<!--    </script>-->
 
 
 
