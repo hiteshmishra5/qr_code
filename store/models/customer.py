@@ -22,7 +22,6 @@ class Users(models.Model):
     optometry = models.BooleanField(default=False)
     sputum = models.BooleanField(default=False)
     vitals = models.BooleanField(default=False)
-    sample_collection = models.BooleanField(default=False)
     pathology = models.BooleanField(default=False)
 
     def __str__(self):
