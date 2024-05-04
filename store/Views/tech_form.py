@@ -123,6 +123,7 @@ class AddPatient(View):
                     current_vitals = patient.vitals
                     current_pathology = patient.pathology
                     current_drconsultation = patient.drconsultation
+                     
 
                     # Update the modalities based on the form data if the checkbox is checked
                     if 'registration+{}'.format(patient_name_from_checkbox) in request.POST:
