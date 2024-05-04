@@ -242,5 +242,6 @@ class Vitals(View):
         return redirect('https://docs.google.com/forms/d/e/1FAIpQLScF3xaTt7VxC4P6sl0ZUShp9E7PVxgXfxN2oV6g0-sCUzmsBQ/viewform')
 
 
-
-
+class Vitals1(View):
+    def get(self, request):
+        return redirect('https://docs.google.com/forms/d/e/1FAIpQLScQk_GxHRx1WhcM8jOuUsYYOZUA92FbQ6Xr6dblShoxXu8QHQ/viewform')
