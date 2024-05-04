@@ -297,7 +297,8 @@
                       <th class="sticky-header">Audio</th>
                       <th class="sticky-header">Opto</th>
                       <th class="sticky-header">Vitals</th>
-                        <th class="sticky-header">pathology</th>
+                        <th class="sticky-header">Pathology</th>
+                        <th class="sticky-header">Consultation</th>
                       <th class="sticky-header">Actions</th>
 
                     </tr>
@@ -312,33 +313,36 @@
                       <td>{{ customer.age }}</td>
                       <td>{{ customer.gender }}</td>
                         <td>
-                        <input type="checkbox" id="registration" name="registration+{{customer.patient_id}}" {% if customer.registration %}checked{% endif %}>
+                        <input type="checkbox" id="registration" name="registration+{{customer.patient_name}}" {% if customer.registration %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="xray" name="xray+{{customer.patient_id}}" {% if customer.xray %}checked{% endif %}>
+                        <input type="checkbox" id="xray" name="xray+{{customer.patient_name}}" {% if customer.xray %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="ecg" name="ecg+{{customer.patient_id}}" {% if customer.ecg %}checked{% endif %}>
+                        <input type="checkbox" id="ecg" name="ecg+{{customer.patient_name}}" {% if customer.ecg %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="pft" name="pft+{{customer.patient_id}}" {% if customer.pft %}checked{% endif %}>
+                        <input type="checkbox" id="pft" name="pft+{{customer.patient_name}}" {% if customer.pft %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="audiometry" name="audiometry+{{customer.patient_id}}" {% if customer.audiometry %}checked{% endif %}>
+                        <input type="checkbox" id="audiometry" name="audiometry+{{customer.patient_name}}" {% if customer.audiometry %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="optometry" name="optometry+{{customer.patient_id}}" {% if customer.optometry %}checked{% endif %}>
+                        <input type="checkbox" id="optometry" name="optometry+{{customer.patient_name}}" {% if customer.optometry %}checked{% endif %}>
                       </td>
                       <td>
-                        <input type="checkbox" id="vitals" name="vitals+{{customer.patient_id}}" {% if customer.vitals %}checked{% endif %}>
+                        <input type="checkbox" id="vitals" name="vitals+{{customer.patient_name}}" {% if customer.vitals %}checked{% endif %}>
                       </td>
                         <td>
-                        <input type="checkbox" id="pathology" name="pathology+{{customer.patient_id}}" {% if customer.pathology %}checked{% endif %}>
+                        <input type="checkbox" id="pathology" name="pathology+{{customer.patient_name}}" {% if customer.pathology %}checked{% endif %}>
+                      </td>
+                        <td>
+                        <input type="checkbox" id="drconsultation" name="drconsultation+{{customer.patient_name}}" {% if customer.drconsultation %}checked{% endif %}>
                       </td>
                       <td>
                         <div class="d-flex">
                           <a href="{% url 'update_patient' customer_id=customer.id %}" class="btn btn-success btn-sm mx-1">Edit</a>
-                            <input type="hidden" name="patient_id" value="{{ customer.patient_id }}">
+                            <input type="hidden" name="patient_name" value="{{ customer.patient_name }}">
                             <button type="submit" class="btn btn-primary btn-sm" name="save_modalities">Save</button>
                         </div>
                       </td>
