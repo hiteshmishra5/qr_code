@@ -97,72 +97,74 @@ class AddPatient(View):
             return "This is not a valid Email"
 
         return None
+
     def save_modalities(self, request):
         for key in request.POST.keys():
-            if any(key.startswith(modality) for modality in ['registration+', 'xray+', 'ecg+', 'pft+', 'audiometry+', 'optometry+', 'vitals+', 'sample_collection+', 'pathology+', 'drconsultation+']):
+            if any(key.startswith(modality) for modality in
+                   ['registration+', 'xray+', 'ecg+', 'pft+', 'audiometry+', 'optometry+', 'vitals+', 'pathology+', 'drconsultation+']):
+                patient_name_from_checkbox = key.split('+')[-1]
+                print(patient_name_from_checkbox)
 
-                patient_id_from_checkbox = key.split('+')[-1]
-                print(patient_id_from_checkbox)
+                # Fetch the corresponding patient instances
+                patients = Users.objects.filter(patient_name=patient_name_from_checkbox)
 
-                # Fetch the corresponding patient instance
-                try:
-                    patient = Users.objects.get(patient_id=patient_id_from_checkbox)
-                except Users.DoesNotExist:
+                if not patients.exists():
                     return HttpResponse("Patient not found", status=400)
 
-                # Fetch the current values from the database
-                current_registration = patient.registration
-                current_xray = patient.xray
-                current_ecg = patient.ecg
-                current_pft = patient.pft
-                current_audiometry = patient.audiometry
-                current_optometry = patient.optometry
-                current_vitals = patient.vitals
-                current_sample_collection = patient.sample_collection
-                current_pathology = patient.pathology
+                # Iterate over the queryset of patients
+                for patient in patients:
+                    # Fetch the current values from the database
+                    current_registration = patient.registration
+                    current_xray = patient.xray
+                    current_ecg = patient.ecg
+                    current_pft = patient.pft
+                    current_audiometry = patient.audiometry
+                    current_optometry = patient.optometry
+                    current_vitals = patient.vitals
+                    current_pathology = patient.pathology
+                    current_drconsultation = patient.drconsultation
 
-                # Update the modalities based on the form data if the checkbox is checked
-                if 'registration+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.registration = True
-                if 'xray+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.xray = True
-                if 'ecg+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.ecg = True
-                if 'pft+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.pft = True
-                if 'audiometry+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.audiometry = True
-                if 'optometry+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.optometry = True
-                if 'vitals+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.vitals = True
-                if 'sample_collection+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.sample_collection = True
-                if 'pathology+{}'.format(patient_id_from_checkbox) in request.POST:
-                    patient.pathology = True
+                    # Update the modalities based on the form data if the checkbox is checked
+                    if 'registration+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.registration = True
+                    if 'xray+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.xray = True
+                    if 'ecg+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.ecg = True
+                    if 'pft+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.pft = True
+                    if 'audiometry+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.audiometry = True
+                    if 'optometry+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.optometry = True
+                    if 'vitals+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.vitals = True
+                    if 'drconsultation+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.drconsultation = True
+                    if 'pathology+{}'.format(patient_name_from_checkbox) in request.POST:
+                        patient.pathology = True
 
+                    # If a checkbox was unchecked in the form but is already checked in the database, prevent the update
+                    if not patient.registration and current_registration:
+                        patient.registration = current_registration
+                    if not patient.xray and current_xray:
+                        patient.xray = current_xray
+                    if not patient.ecg and current_ecg:
+                        patient.ecg = current_ecg
+                    if not patient.pft and current_pft:
+                        patient.pft = current_pft
+                    if not patient.audiometry and current_audiometry:
+                        patient.audiometry = current_audiometry
+                    if not patient.optometry and current_optometry:
+                        patient.optometry = current_optometry
+                    if not patient.vitals and current_vitals:
+                        patient.vitals = current_vitals
+                    if not patient.drconsultation and current_drconsultation:
+                        patient.drconsultation = current_drconsultation
+                    if not patient.pathology and current_pathology:
+                        patient.pathology = current_pathology
 
-                # If a checkbox was unchecked in the form but is already checked in the database, prevent the update
-                if not patient.registration and current_registration:
-                    patient.registration = current_registration
-                if not patient.xray and current_xray:
-                    patient.xray = current_xray
-                if not patient.ecg and current_ecg:
-                    patient.ecg = current_ecg
-                if not patient.pft and current_pft:
-                    patient.pft = current_pft
-                if not patient.audiometry and current_audiometry:
-                    patient.audiometry = current_audiometry
-                if not patient.optometry and current_optometry:
-                    patient.optometry = current_optometry
-                if not patient.vitals and current_vitals:
-                    patient.vitals = current_vitals
-                if not patient.sample_collection and current_sample_collection:
-                    patient.sample_collection = current_sample_collection
-                if not patient.pathology and current_pathology:
-                    patient.pathology = current_pathology
-
-                patient.save()
+                    patient.save()
 
         return redirect('form')
 
@@ -206,7 +208,7 @@ class UploadView(View):
                     patient.ecg = row['ecg']
                     patient.optometry = row['optometry']
                     patient.pft = row['pft']
-                    patient.sample_collection = row['sample_collection']
+                    patient.sample_collection = row['drconsultation']
                     patient.vitals = row['vitals']
                     patient.xray = row['xray']
                     patient.registration = row['registration']
