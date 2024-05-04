@@ -320,16 +320,6 @@
 <!--                                    </select>-->
 <!--                                </div>-->
                             </th>
-                            <th>BLOOD
-<!--                                <div class="dropdown-select1" id="filter-blood-dropdown-blood">-->
-<!--                                    <div>BLOOD</div>-->
-<!--                                    <select class="form-control" data-column="14">-->
-<!--                                        <option value="">All</option>-->
-<!--                                        <option value="Done">Done</option>-->
-<!--                                        <option value="Pending">Pending</option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-                            </th>
                             <th>PATHOLOGY
 <!--                                <div class="dropdown-select1" id="filter-pathology-dropdown-pathology">-->
 <!--                                    <div>PATHOLOGY</div>-->
@@ -362,7 +352,6 @@
                                 <td>{% if customer.audiometry == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
                                 <td>{% if customer.optometry == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
                                 <td>{% if customer.vitals == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
-                                 <td>{% if customer.sample_collection == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
                                 <td>{% if customer.pathology == 1 %}<b>Done</b>{% else %}Pending{% endif %}</td>
                             </tr>
                         {% endfor %}
@@ -555,6 +544,8 @@
                     return "Meghalaya Tb Screening";
                 case 4:
                     return "Gujarat North Star";
+                case 4:
+                    return "Okhla";
                 default:
                     return "All Locations";
             }
