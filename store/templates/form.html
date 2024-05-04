@@ -297,7 +297,6 @@
                       <th class="sticky-header">Audio</th>
                       <th class="sticky-header">Opto</th>
                       <th class="sticky-header">Vitals</th>
-                        <th class="sticky-header">Blood</th>
                         <th class="sticky-header">pathology</th>
                       <th class="sticky-header">Actions</th>
 
@@ -332,9 +331,6 @@
                       </td>
                       <td>
                         <input type="checkbox" id="vitals" name="vitals+{{customer.patient_id}}" {% if customer.vitals %}checked{% endif %}>
-                      </td>
-                      <td>
-                        <input type="checkbox" id="sample_collection" name="sample_collection+{{customer.patient_id}}" {% if customer.sample_collection %}checked{% endif %}>
                       </td>
                         <td>
                         <input type="checkbox" id="pathology" name="pathology+{{customer.patient_id}}" {% if customer.pathology %}checked{% endif %}>
