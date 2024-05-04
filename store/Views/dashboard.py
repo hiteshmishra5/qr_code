@@ -33,7 +33,7 @@ class Dashboard(View):
             'optometry': Users.objects.filter(optometry=True, **modalities_filter).count(),
             'vitals': Users.objects.filter(vitals=True, **modalities_filter).count(),
             'sputum': Users.objects.filter(sputum=True, **modalities_filter).count(),
-            'sample_collection': Users.objects.filter(sample_collection=True, **modalities_filter).count(),
+            'drconsultation': Users.objects.filter(drconsultation=True, **modalities_filter).count(),
             'pathology': Users.objects.filter(pathology=True, **modalities_filter).count(),
         }
 
@@ -56,7 +56,7 @@ class Dashboard(View):
                 optometry_modalities = Users.objects.filter(location_id=1, optometry=True).count()
                 vitals_modalities = Users.objects.filter(location_id=1, vitals=True).count()
                 sputum_modalities = Users.objects.filter(location_id=1, sputum=True).count()
-                sample_collection_modalities = Users.objects.filter(location_id=1, sample_collection=True).count()
+                drconsultation_modalities = Users.objects.filter(location_id=1, drconsultation=True).count()
                 pathology = Users.objects.filter(location_id=1, sputum=True).count()
 
         elif selected_location_id==2:
@@ -67,7 +67,7 @@ class Dashboard(View):
                 optometry_modalities = Users.objects.filter(location_id=2, optometry=True).count()
                 vitals_modalities = Users.objects.filter(location_id=2, vitals=True).count()
                 sputum_modalities = Users.objects.filter(location_id=2, sputum=True).count()
-                sample_collection_modalities = Users.objects.filter(location_id=2, sample_collection=True).count()
+                drconsultation_modalities = Users.objects.filter(location_id=2, drconsultation=True).count()
                 pathology = Users.objects.filter(location_id=1, sputum=True).count()
 
         elif selected_location_id==3:
@@ -78,7 +78,7 @@ class Dashboard(View):
                 optometry_modalities = Users.objects.filter(location_id=3, optometry=True).count()
                 vitals_modalities = Users.objects.filter(location_id=3, vitals=True).count()
                 sputum_modalities = Users.objects.filter(location_id=3, sputum=True).count()
-                sample_collection_modalities = Users.objects.filter(location_id=3, sample_collection=True).count()
+                drconsultation_modalities = Users.objects.filter(location_id=3, drconsultation=True).count()
                 pathology = Users.objects.filter(location_id=1, sputum=True).count()
         
         elif  selected_location_id==4:
@@ -89,7 +89,7 @@ class Dashboard(View):
                 optometry_modalities = Users.objects.filter(location_id=4, optometry=True).count()
                 vitals_modalities = Users.objects.filter(location_id=4, vitals=True).count()
                 sputum_modalities = Users.objects.filter(location_id=4, sputum=True).count()
-                sample_collection_modalities = Users.objects.filter(location_id=4, sample_collection=True).count()
+                drconsultation_modalities = Users.objects.filter(location_id=4, drconsultation=True).count()
                 pathology = Users.objects.filter(location_id=1, sputum=True).count()
         
         else :
@@ -101,7 +101,7 @@ class Dashboard(View):
                 optometry_modalities = Users.objects.filter(optometry=True).count()
                 vitals_modalities = Users.objects.filter(vitals=True).count()
                 sputum_modalities = Users.objects.filter(sputum=True).count()
-                sample_collection_modalities = Users.objects.filter(sample_collection=True).count()
+                drconsultation_modalities = Users.objects.filter(drconsultation=True).count()
                 pathology = Users.objects.filter(location_id=1, sputum=True).count()
 
                
@@ -113,7 +113,7 @@ class Dashboard(View):
                             'optometry': optometry_modalities,
                             'vitals': vitals_modalities,
                             'sputum': sputum_modalities,
-                            'sample_collection': sample_collection_modalities,
+                            'drconsultation': drconsultation_modalities,
                             'pathology': pathology,
                             'registration': registration}
 
