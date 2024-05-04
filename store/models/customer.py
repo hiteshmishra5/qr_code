@@ -23,6 +23,7 @@ class Users(models.Model):
     sputum = models.BooleanField(default=False)
     vitals = models.BooleanField(default=False)
     pathology = models.BooleanField(default=False)
+    drconsultation = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.patient_name)
